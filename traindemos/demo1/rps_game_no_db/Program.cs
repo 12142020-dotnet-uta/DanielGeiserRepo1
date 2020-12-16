@@ -60,38 +60,38 @@ namespace rps_game_no_db
                 Random cpu = new Random();
                 int ComputerPick= cpu.Next(100)%3 +1;
                 if(userConvertResponse == ComputerPick){
-                    Console.WriteLine("You Tied");
+                    Console.WriteLine("\n\tYou Tied");
                     again = Playagain(null);
                 }
                 else{
                     if(userConvertResponse == 1 && ComputerPick == 2)
                     {
-                        Console.WriteLine("Paper covers rock\nYou Lost");
+                        Console.WriteLine("\nPaper covers rock\n\tYou Lost");
                         again = Playagain(null);
                     }
                     else if(userConvertResponse == 1 && ComputerPick == 3)
                     {
-                        Console.WriteLine("Rock crushes Scissors\nYou Won");
+                        Console.WriteLine("\nRock crushes Scissors\n\tYou Won");
                         again = Playagain(null);
                     }
                     else if(userConvertResponse == 2 && ComputerPick == 1)
                     {
-                        Console.WriteLine("Paper covers Rock\nYou Won");
+                        Console.WriteLine("\nPaper covers Rock\n\tYou Won");
                         again = Playagain(null);
                     }
                     else if(userConvertResponse == 2 && ComputerPick == 3)
                     {
-                        Console.WriteLine("Scissors cuts paper\nYou Lost");
+                        Console.WriteLine("\nScissors cuts paper\n\tYou Lost");
                         again = Playagain(null);
                     }
                     else if(userConvertResponse == 3 && ComputerPick == 2)
                     {
-                        Console.WriteLine("Scissors cuts paper\nYou Won");
+                        Console.WriteLine("\nScissors cuts paper\n\tYou Won");
                         again = Playagain(null);
                     }
                     else if(userConvertResponse == 3 && ComputerPick == 1)
                     {
-                        Console.WriteLine("Rock crushes Scissors\nYou Lost");
+                        Console.WriteLine("\nRock crushes Scissors\n\tYou Lost");
                         again = Playagain(null);
                     }
 
@@ -104,6 +104,7 @@ namespace rps_game_no_db
 
         }
         public static string Playagain(string choice){
+            Console.WriteLine();
             do{
                 Console.WriteLine("Play Again?\nType yes or no");
                 choice = Console.ReadLine();
