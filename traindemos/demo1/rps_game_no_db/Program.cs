@@ -16,6 +16,27 @@ namespace rps_game_no_db
                 Console.WriteLine("Please choose Rock, Paper, or Scissors by typing 1, 2, or 3 and hitting enter"+
                     "\n\t1) Rock\n\t2) Paper\n\t3) Scissors");
                 userResponse = Console.ReadLine();
+                switch(userResponse)
+                {
+                    case "rock":
+                        userResponse = "1";
+                        break;
+                    case "paper":
+                        userResponse = "2";
+                        break;
+                    case "scissors":
+                        userResponse = "3";
+                        break;
+                    case "Rock":
+                        userResponse = "1";
+                        break;
+                    case "Paper":
+                        userResponse = "2";
+                        break;
+                    case "Scissors":
+                        userResponse = "3";
+                        break;
+                }
 
                 //Console.WriteLine(userResponse);
                 userResp = int.TryParse(userResponse,out userConvertResponse);
@@ -23,27 +44,7 @@ namespace rps_game_no_db
                 // {
                 //     Console.WriteLine("Your response is invaild");
                 // }
-                switch(userResponse)
-                {
-                    case "rock":
-                        userConvertResponse = 1;
-                        break;
-                    case "paper":
-                        userConvertResponse = 2;
-                        break;
-                    case "scissors":
-                        userConvertResponse = 3;
-                        break;
-                    case "Rock":
-                        userConvertResponse = 1;
-                        break;
-                    case "Paper":
-                        userConvertResponse = 2;
-                        break;
-                    case "Scissors":
-                        userConvertResponse = 3;
-                        break;
-                }
+                
                 switch(userConvertResponse)
                 {
                     case int a when userConvertResponse > 3:
