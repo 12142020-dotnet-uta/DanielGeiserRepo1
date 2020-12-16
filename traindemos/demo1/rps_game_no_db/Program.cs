@@ -6,7 +6,8 @@ namespace rps_game_no_db
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            //Console.WriteLine("Hello World!");
+            
         }
     }
 }
