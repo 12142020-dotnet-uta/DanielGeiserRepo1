@@ -108,12 +108,30 @@ namespace rps_game_no_db
             do{
                 Console.WriteLine("Play Again?\nType yes or no");
                 choice = Console.ReadLine();
-                if(choice.Equals("yes")==false)
+                // if(choice.Equals("yes")==false)
+                // {
+                //     if(choice.Equals("no")==false)
+                //     {
+                //         choice = null;
+                //     }
+                // }
+                switch(choice)
                 {
-                    if(choice.Equals("no")==false)
-                    {
+                    case "yes":
+                        choice = "yes";
+                        break;
+                    case "y":
+                        choice = "yes";
+                        break;
+                    case "no":
+                        choice = "no";
+                        break;
+                    case "n":
+                        choice = "no";
+                        break;
+                    default:
                         choice = null;
-                    }
+                        break;
                 }
 
             }while(choice == null);
