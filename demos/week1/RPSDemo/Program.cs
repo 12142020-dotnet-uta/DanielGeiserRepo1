@@ -13,11 +13,13 @@ namespace RPSDemo
                     "\nPlease pick an option");
                 Console.WriteLine("1) Normal Game\n2) Special Game\nOr put quit");
                 choice = Console.ReadLine();
-                if(choice == "1"){
+                if(choice == "1")
+                {
                    NormalGame();
                    choice = null;
                 }
-                else if(choice == "2"){
+                else if(choice == "2")
+                {
                    SpecialGame();
                    choice = null;
                 }
