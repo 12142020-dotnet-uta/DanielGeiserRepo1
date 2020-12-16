@@ -10,11 +10,12 @@ namespace rps_game_no_db
             int userConvertResponse;
             bool userResp;
             string again  = null;
+            string userResponse;
             do{
                 //Console.WriteLine("Hello World!");
                 Console.WriteLine("Please choose Rock, Paper, or Scissors by typing 1, 2, or 3 and hitting enter"+
                     "\n\t1) Rock\n\t2) Paper\n\t3) Scissors");
-                string userResponse = Console.ReadLine();
+                userResponse = Console.ReadLine();
 
                 //Console.WriteLine(userResponse);
                 userResp = int.TryParse(userResponse,out userConvertResponse);
@@ -22,6 +23,27 @@ namespace rps_game_no_db
                 // {
                 //     Console.WriteLine("Your response is invaild");
                 // }
+                switch(userResponse)
+                {
+                    case "rock":
+                        userConvertResponse = 1;
+                        break;
+                    case "paper":
+                        userConvertResponse = 2;
+                        break;
+                    case "scissors":
+                        userConvertResponse = 3;
+                        break;
+                    case "Rock":
+                        userConvertResponse = 1;
+                        break;
+                    case "Paper":
+                        userConvertResponse = 2;
+                        break;
+                    case "Scissors":
+                        userConvertResponse = 3;
+                        break;
+                }
                 switch(userConvertResponse)
                 {
                     case int a when userConvertResponse > 3:
@@ -77,7 +99,7 @@ namespace rps_game_no_db
 
                 Console.WriteLine();
                
-            }while(userResp == false || again.Equals("no")==false);
+            }while(userResp == false || again.Equals("no") == false);
             Console.WriteLine("Thanks for playing. \nGoodbye!");
 
         }
