@@ -1,4 +1,9 @@
 ﻿using System;
+using ClassesRPS;
+//login, and logout
+// store informaiton for history
+// total games, wins, losts
+//percentages of picks
 
 
 namespace rps_game_no_db
