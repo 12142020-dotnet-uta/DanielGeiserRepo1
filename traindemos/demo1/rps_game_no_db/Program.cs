@@ -1,10 +1,11 @@
 ﻿using System;
-using ClassesRPS;
+using System.Collections.Generic;
+
 //login, and logout
 // store informaiton for history
 // total games, wins, losts
 //percentages of picks
-
+// Round table, Match table, Player table
 
 namespace rps_game_no_db
 {
@@ -12,12 +13,42 @@ namespace rps_game_no_db
     {
         static void Main(string[] args)
         {
+            List<Player> players = new List<Player>();   
+            List<Player> matches = new List<Player>();
+            List<Player> rounds = new List<Player>();
+
+            //create the computer that everyone plays against
+            Player p1 = new Player()
+            {
+                firstName = "Computer",
+                lastName = "Skynite"
+            };
+            players.Add(p1);
+
+            Match match = new Match();
+
+            //Login in a player or creat a new player. Unique fristName and lastName,
+            //other wise, grab the existing player
+
+            Console.WriteLine("Please enter your first name.\nif you enter a unique first and last name i will create a new player");
+            string useFirstName = Console.ReadLine();
+            string[] splitName = useFirstName.Split(' ');
+            
+
+            Player p2 = new Player()
+            {
+                firstName = splitName[0],
+                lastName = splitName[1]
+            };
+            players.Add(p2);
+
+            //user will choose Rock, Paper, or Scissors
             int userConvertResponse;
             bool userResp;
             string again  = null;
             string userResponse;
             do{
-                //Console.WriteLine("Hello World!");
+                Console.WriteLine($"Welcome {p2.firstName} {p2.lastName}");
                 Console.WriteLine("Please choose Rock, Paper, or Scissors by typing 1, 2, or 3 and hitting enter"+
                     "\n\t1) Rock\n\t2) Paper\n\t3) Scissors");
                 userResponse = Console.ReadLine();
