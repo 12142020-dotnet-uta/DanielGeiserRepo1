@@ -20,9 +20,9 @@ namespace Full_work_RPS_no_db
             rounds = new List<Round>();
         }
 
-        public void Winning(string win, string choice1, string choice2)
+        public void Winning(int MiD,string win, string choice1, string choice2)
         {
-            rounds.Add(new Round(win,choice1,choice2));
+            rounds.Add(new Round(MiD,win,choice1,choice2));
             number_of_games -= 1;
             if(win == "cpu")
             {
@@ -31,11 +31,6 @@ namespace Full_work_RPS_no_db
             else if(win == "you")
             {
                 playerOne += 1;
-            }
-            else if(win == "tie")
-            {
-                playerOne += 1;
-                computer += 1;
             }
         }
 
@@ -61,12 +56,28 @@ namespace Full_work_RPS_no_db
                 return false;
             }
         }
+        public string Result()
+        {
+            if(playerOne == (limitMatches/2)+1)
+            {
+                return "WON";
+            }
+            else if(computer == (limitMatches/2)+1)
+            {
+                return "LOST";
+            }
+            else
+            {
+                return "TIE";
+            }
+        }
 
         public void ListTheEntries()
         {
             foreach (var entry in rounds)
             {
                 Console.Write("\t"+entry.ToString()+"\n");
+                main.rounds.Add(entry);
             }
         }
     }

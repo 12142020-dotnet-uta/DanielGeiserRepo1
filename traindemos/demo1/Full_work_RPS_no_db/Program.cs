@@ -6,52 +6,52 @@ namespace Full_work_RPS_no_db
 {
     class Program
     {
-        public static List<Player> totalAccounts = new List<Player>();
-        public static List<Round> rounds = new List<Round>();
-        public static List<Match> matches = new List<Match>();
-        public static Player temp;
-        public static int firstStep;
+        // public static List<Player> totalAccounts = new List<Player>();
+        // public static List<Round> rounds = new List<Round>();
+        // public static List<Match> matches = new List<Match>();
+        // public static Player temp;
+        // public static int firstStep;
         public static string userFN;
         public static string userLN;
         public static string PW;
-        static void Main(string[] args)
-        {
-            totalAccounts.Add(new Player(0,"computer","antihuman","humnansbad@earth.com","010101"));
-            totalAccounts.Add(new Player(1,"Dan","Mag","dragon@gmail.com","kings1234"));
-            totalAccounts.Add(new Player(2,"Max","Powers","historyiswrong@yahoo.com","1234567"));
-            totalAccounts.Add(new Player(3,"the","People","government@hotmail.com","2020ending"));
-            int begining = 0;
+        // static void Main(string[] args)
+        // {
+        //     totalAccounts.Add(new Player(0,"computer","antihuman","humnansbad@earth.com","010101"));
+        //     totalAccounts.Add(new Player(1,"Dan","Mag","dragon@gmail.com","kings1234"));
+        //     totalAccounts.Add(new Player(2,"Max","Powers","historyiswrong@yahoo.com","1234567"));
+        //     totalAccounts.Add(new Player(3,"the","People","government@hotmail.com","2020ending"));
+        //     int begining = 0;
 
-            do{
-                firstStep = signOn();
-                if(firstStep == 1)
-                {
-                    temp = Login();
-                    if(temp.Id == 999)
-                    {
-                        continue;
-                    }
-                    else
-                    {
-                        MatchMenu();
-                    }
-                }
-                else if(firstStep == 2)
-                {
-                    temp = CreatePlayer();
-                    totalAccounts.Add(temp);
-                    MatchMenu();
-                }
-                else if(firstStep == 3)
-                {
-                    begining = 1;
-                }
+        //     do{
+        //         firstStep = signOn();
+        //         if(firstStep == 1)
+        //         {
+        //             temp = Login();
+        //             if(temp.Id == 999)
+        //             {
+        //                 continue;
+        //             }
+        //             else
+        //             {
+        //                 MatchMenu();
+        //             }
+        //         }
+        //         else if(firstStep == 2)
+        //         {
+        //             temp = CreatePlayer();
+        //             totalAccounts.Add(temp);
+        //             MatchMenu();
+        //         }
+        //         else if(firstStep == 3)
+        //         {
+        //             begining = 1;
+        //         }
 
-            }while(begining == 0);
+        //     }while(begining == 0);
             
-        }
+        // }
 
-        public static void MatchMenu()
+        public static void MatchMenu(Player temp)
         {
             int active = 1;
             string pick1;
@@ -69,8 +69,7 @@ namespace Full_work_RPS_no_db
                 {
                     Player update = PlayAGame(temp);
                     int indexID = FindIndexUser(update.Id);
-                    totalAccounts[indexID].combine(update.Total_games,update.won,update.lost);
-                    temp = totalAccounts[indexID];
+                    temp = main.totalAccounts[indexID];
                 }
                 else if( pick1 == "2")
                 {
@@ -89,9 +88,9 @@ namespace Full_work_RPS_no_db
         public static int FindIndexUser(int x)
         {
             int num = 0;
-            for(int i = 0; i < totalAccounts.Count;i++)
+            for(int i = 0; i < main.totalAccounts.Count;i++)
             {
-                if(totalAccounts[i].Id==x)
+                if(main.totalAccounts[i].Id==x)
                 {
                     num = i;
                 }
@@ -101,6 +100,7 @@ namespace Full_work_RPS_no_db
 
         public static Player PlayAGame(Player user)
         {
+            Player computer = new Player();
             Match game= new Match();
             int userConvertResponse;
             bool userResp;
@@ -148,45 +148,52 @@ namespace Full_work_RPS_no_db
                 int ComputerPick= cpu.Next(100)%3 +1;
                 if(userConvertResponse == ComputerPick){
                     Console.WriteLine("\n\tYou Tied");
-                    game.Winning("tie",getResult(userConvertResponse),getResult(userConvertResponse));
+                    game.Winning(main.matches.Count +1,"tie",getResult(userConvertResponse),getResult(userConvertResponse));
                     user.addTie();
+                    computer.addTie();
                 }
                 else{
                     if(userConvertResponse == 1 && ComputerPick == 2)
                     {
                         Console.WriteLine("\nPaper covers rock\n\tYou Lost");
-                        game.Winning("cpu",getResult(ComputerPick),getResult(userConvertResponse));
+                        game.Winning(main.matches.Count +1,"cpu",getResult(ComputerPick),getResult(userConvertResponse));
                         user.addLost();
+                        computer.addWin();
                     }
                     else if(userConvertResponse == 1 && ComputerPick == 3)
                     {
                         Console.WriteLine("\nRock crushes Scissors\n\tYou Won");
-                        game.Winning("you",getResult(ComputerPick),getResult(userConvertResponse));
+                        game.Winning(main.matches.Count +1,"you",getResult(ComputerPick),getResult(userConvertResponse));
                         user.addWin();
+                        computer.addLost();
                     }
                     else if(userConvertResponse == 2 && ComputerPick == 1)
                     {
                         Console.WriteLine("\nPaper covers Rock\n\tYou Won");
-                        game.Winning("you",getResult(ComputerPick),getResult(userConvertResponse));
+                        game.Winning(main.matches.Count +1,"you",getResult(ComputerPick),getResult(userConvertResponse));
                         user.addWin();
+                        computer.addLost();
                     }
                     else if(userConvertResponse == 2 && ComputerPick == 3)
                     {
                         Console.WriteLine("\nScissors cuts paper\n\tYou Lost");
-                        game.Winning("cpu",getResult(ComputerPick),getResult(userConvertResponse));
+                        game.Winning(main.matches.Count +1,"cpu",getResult(ComputerPick),getResult(userConvertResponse));
                         user.addLost();
+                        computer.addWin();
                     }
                     else if(userConvertResponse == 3 && ComputerPick == 2)
                     {
                         Console.WriteLine("\nScissors cuts paper\n\tYou Won");
-                        game.Winning("you",getResult(ComputerPick),getResult(userConvertResponse));
+                        game.Winning(main.matches.Count +1,"you",getResult(ComputerPick),getResult(userConvertResponse));
                         user.addWin();
+                        computer.addLost();
                     }
                     else if(userConvertResponse == 3 && ComputerPick == 1)
                     {
                         Console.WriteLine("\nRock crushes Scissors\n\tYou Lost");
-                        game.Winning("cpu",getResult(ComputerPick),getResult(userConvertResponse));
+                        game.Winning(main.matches.Count +1,"cpu",getResult(ComputerPick),getResult(userConvertResponse));
                         user.addLost();
+                        computer.addWin();
                     }
 
                 }
@@ -195,9 +202,18 @@ namespace Full_work_RPS_no_db
                
             }while(game.Check()==false);
             game.ListTheEntries();
+            string result = game.Result();
+            if(result == "WON")
+            {
+                main.matches.Add(new MatchResults(main.matches.Count + 1,user.Id, user.firstName + " " +user.lastName));
+            }
+            else if(result == "LOST")
+            {
+                main.matches.Add(new MatchResults(main.matches.Count + 1,0, computer.firstName + " " +computer.lastName));
+            }
+            main.totalAccounts[0].combine(computer.Total_games,computer.won,computer.lost,computer.tie);
             return user;
         }
-
         public static int signOn()
         {
             int numPicked = 0;
@@ -207,7 +223,7 @@ namespace Full_work_RPS_no_db
             while(numPicked == 0)
             {
                 Console.WriteLine("Welcome gamer!?\nLets play some Rock Paper Scissors\but first: ");
-                Console.WriteLine("\t1) Player Login\n\t2)Create new Player\n\t3) Quit\nPlease on only use 1, 2,or 3.");
+                Console.WriteLine("\t1) Player Login\n\t2) Create new Player\n\t3) Quit\nPlease on only use 1, 2,or 3.");
                 selection = Console.ReadLine();
                 if(selection.Length == 1)
                 {
@@ -227,27 +243,25 @@ namespace Full_work_RPS_no_db
                 }
 
             }
-            return numPicked;
-                        
-           
+            return numPicked;      
         }
         public static Player CheckLogin()
         {
             Player temp2 = new Player();
             do{
                 int total = 0;
-                for(int x = 0; x < totalAccounts.Count;x++)
+                for(int x = 0; x < main.totalAccounts.Count;x++)
                 {
-                    if(totalAccounts[x].signedin == true)
+                    if(main.totalAccounts[x].signedin == true)
                     {
-                        temp2 = totalAccounts[x];
+                        temp2 = main.totalAccounts[x];
                     }
                     else
                     {
                         total++;
                     }
                 }
-                if(total == totalAccounts.Count)
+                if(total == main.totalAccounts.Count)
                 {
                     temp2.signedin = true;
                 }
@@ -266,26 +280,35 @@ namespace Full_work_RPS_no_db
                 userLN = Console.ReadLine();
                 Console.WriteLine("Enter password: ");
                 PW = Console.ReadLine();
-                for(int z = 0; z < totalAccounts.Count; z++)
+                for(int z = 0; z < main.totalAccounts.Count; z++)
                 {
-                    if(totalAccounts[z].SignIn(userFN,userLN,PW))
+                    if(main.totalAccounts[z].SignIn(userFN,userLN,PW))
                     {
-                        temp2 = totalAccounts[z];
+                        temp2 = main.totalAccounts[z];
                     }
                     else{
                         total++;
                     }
                     
                 }
-                if(totalAccounts.Count==total)
+                if(main.totalAccounts.Count==total)
                 {
                     Console.WriteLine("Nothing matched");
                     temp2.signedin = true;
                     temp2.Id = 999;
+                    temp2.firstName = userFN;
+                    temp2.lastName = userLN;
+                    temp2.password = PW;
                 }
             }while(temp2.signedin == false);
 
             return temp2;
+        }
+        public static Player AutoCreatePlayer(Player a)
+        {
+            a.Id = main.totalAccounts.Count + 1;
+            main.totalAccounts.Add(a);
+            return a;
         }
 
         public static Player CreatePlayer()
@@ -324,7 +347,7 @@ namespace Full_work_RPS_no_db
             }
             passW = temp;
             temp = "";
-            return new Player(totalAccounts.Count +1, first,last,email,passW,true);
+            return new Player(main.totalAccounts.Count +1, first,last,email,passW,true);
         }
 
         public static string vaildEntry(string temp)

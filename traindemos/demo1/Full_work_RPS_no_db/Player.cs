@@ -77,9 +77,12 @@ namespace Full_work_RPS_no_db
             lost++;
             Total_games++;
         }
-        public void combine(int a, int b, int c)
+        public void combine(int a, int b, int c, int d)
         {
-
+            Total_games += a;
+            won += b;
+            lost += c;
+            tie += d;
         }
 
         public override string ToString()
