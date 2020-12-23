@@ -195,7 +195,5 @@ namespace RpsGame_refactored_Db
         {
             return rounds.ToList();
         }
-
-
     }
 }

@@ -8,7 +8,7 @@ namespace Full_work_RPS_no_db
         public string email {get; set;}
         public string password {get; set;}
         public int Total_games {get; set;}
-        public int won {get; set;}y
+        public int won {get; set;}
         public int lost {get; set;}
         public int tie{get; set;}
         public bool signedin {get; set;}

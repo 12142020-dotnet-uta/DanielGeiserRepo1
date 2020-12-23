@@ -5,7 +5,6 @@ namespace Full_work_RPS_no_db
 {
     public class main
     {
-
         public static List<Player> totalAccounts = new List<Player>();
         public static List<Round> rounds = new List<Round>();
         public static List<MatchResults> matches = new List<MatchResults>();
