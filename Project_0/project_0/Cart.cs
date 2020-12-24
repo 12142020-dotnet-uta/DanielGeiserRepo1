@@ -1,10 +1,12 @@
 using System.Collections.Generic;
+using System;
 
 namespace project_0
 {
-    public class Cart
+    class Cart
     {
-        private List<InventoryItem> shoppingCart;
-        public Customer {get; set;}
+        private Customer customer {get; set;}
+        private List<Item> shoppingCart;
+        
     }
 }

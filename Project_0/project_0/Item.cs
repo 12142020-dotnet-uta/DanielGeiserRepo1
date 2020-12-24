@@ -1,9 +1,15 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace project_0
 {
-    public class Item : Product
+    public class Item 
     {
-        int Qty;
-        double Sale;
+        [Key]
+        public int store_ID {get; set;}
+        [Required]
+        private int Qty;
+        private double Sale;
+        public Product product {get; set;}
 
         public int qty
         {

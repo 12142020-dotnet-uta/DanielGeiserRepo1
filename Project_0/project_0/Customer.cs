@@ -7,8 +7,10 @@ namespace project_0
     public class Customer
     {
         [Key]
-        public int Id {get; set;}
+        public Guid Customer_Id {get; set;} = new Guid();
+        [Required,MinLength(2)]
         public string firstName {get; set;}
+        [Required,MinLength(2)]
         public string lastName {get; set;}
         private string FavStore;
         public string favstore
