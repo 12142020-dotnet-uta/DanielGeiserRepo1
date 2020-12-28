@@ -18,5 +18,18 @@ namespace project_0
             get{return FavStore;}
             set{FavStore = value != null ? "No where": value;}
         }
+        public Customer()
+        {
+
+        }
+        public Customer(string fname, string lname)
+        {
+            firstName = fname;
+            lastName = lname;
+        }
+        public override string ToString()
+        {
+            return $"{firstName}  {lastName}";
+        }
     }
 }

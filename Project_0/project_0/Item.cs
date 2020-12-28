@@ -5,10 +5,11 @@ namespace project_0
     public class Item 
     {
         [Key]
-        public int store_ID {get; set;}
+        public int Id {get; set;}
         [Required]
         private int Qty;
         private double Sale;
+        [Required]
         public Product product {get; set;}
 
         public int qty
@@ -32,6 +33,17 @@ namespace project_0
                     Sale = value;
                 }
             }
+        }
+
+        public Item()
+        {
+
+        }
+        public Item(int storeID, int qty,Product Aproduct):this()
+        {
+            Id = storeID;
+            Qty = qty;
+            product = Aproduct;
         }
     }
 }

@@ -52,10 +52,10 @@ namespace project_0.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "inventoryItems",
+                name: "ItemsAtStore",
                 columns: table => new
                 {
-                    store_ID = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     productId = table.Column<int>(type: "int", nullable: true),
                     qty = table.Column<int>(type: "int", nullable: false),
@@ -64,15 +64,15 @@ namespace project_0.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_inventoryItems", x => x.store_ID);
+                    table.PrimaryKey("PK_ItemsAtStore", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_inventoryItems_products_productId",
+                        name: "FK_ItemsAtStore_products_productId",
                         column: x => x.productId,
                         principalTable: "products",
                         principalColumn: "productId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_inventoryItems_stores_StoreId",
+                        name: "FK_ItemsAtStore_stores_StoreId",
                         column: x => x.StoreId,
                         principalTable: "stores",
                         principalColumn: "Id",
@@ -113,33 +113,33 @@ namespace project_0.Migrations
                 {
                     OrderID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    itemstore_ID = table.Column<int>(type: "int", nullable: true)
+                    itemId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_orderedItems", x => x.OrderID);
                     table.ForeignKey(
-                        name: "FK_orderedItems_inventoryItems_itemstore_ID",
-                        column: x => x.itemstore_ID,
-                        principalTable: "inventoryItems",
-                        principalColumn: "store_ID",
+                        name: "FK_orderedItems_ItemsAtStore_itemId",
+                        column: x => x.itemId,
+                        principalTable: "ItemsAtStore",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_inventoryItems_productId",
-                table: "inventoryItems",
+                name: "IX_ItemsAtStore_productId",
+                table: "ItemsAtStore",
                 column: "productId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_inventoryItems_StoreId",
-                table: "inventoryItems",
+                name: "IX_ItemsAtStore_StoreId",
+                table: "ItemsAtStore",
                 column: "StoreId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_orderedItems_itemstore_ID",
+                name: "IX_orderedItems_itemId",
                 table: "orderedItems",
-                column: "itemstore_ID");
+                column: "itemId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_orders_Customer_Id",
@@ -161,7 +161,7 @@ namespace project_0.Migrations
                 name: "orders");
 
             migrationBuilder.DropTable(
-                name: "inventoryItems");
+                name: "ItemsAtStore");
 
             migrationBuilder.DropTable(
                 name: "customers");

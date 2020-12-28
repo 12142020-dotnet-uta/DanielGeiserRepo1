@@ -10,7 +10,7 @@ using project_0;
 namespace project_0.Migrations
 {
     [DbContext(typeof(StoreAppContext))]
-    [Migration("20201224052645_TestMigration")]
+    [Migration("20201228022021_TestMigration")]
     partial class TestMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -45,7 +45,7 @@ namespace project_0.Migrations
 
             modelBuilder.Entity("project_0.Item", b =>
                 {
-                    b.Property<int>("store_ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .UseIdentityColumn();
@@ -62,13 +62,13 @@ namespace project_0.Migrations
                     b.Property<double>("sale")
                         .HasColumnType("float");
 
-                    b.HasKey("store_ID");
+                    b.HasKey("Id");
 
                     b.HasIndex("StoreId");
 
                     b.HasIndex("productId");
 
-                    b.ToTable("inventoryItems");
+                    b.ToTable("ItemsAtStore");
                 });
 
             modelBuilder.Entity("project_0.OrderedItem", b =>
@@ -78,12 +78,12 @@ namespace project_0.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<int?>("itemstore_ID")
+                    b.Property<int?>("itemId")
                         .HasColumnType("int");
 
                     b.HasKey("OrderID");
 
-                    b.HasIndex("itemstore_ID");
+                    b.HasIndex("itemId");
 
                     b.ToTable("orderedItems");
                 });
@@ -140,7 +140,7 @@ namespace project_0.Migrations
 
             modelBuilder.Entity("project_0.Store", b =>
                 {
-                    b.Property<int?>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .UseIdentityColumn();
@@ -164,7 +164,7 @@ namespace project_0.Migrations
             modelBuilder.Entity("project_0.Item", b =>
                 {
                     b.HasOne("project_0.Store", null)
-                        .WithMany("productList")
+                        .WithMany("ItemList")
                         .HasForeignKey("StoreId");
 
                     b.HasOne("project_0.Product", "product")
@@ -178,7 +178,7 @@ namespace project_0.Migrations
                 {
                     b.HasOne("project_0.Item", "item")
                         .WithMany()
-                        .HasForeignKey("itemstore_ID");
+                        .HasForeignKey("itemId");
 
                     b.Navigation("item");
                 });
@@ -202,9 +202,9 @@ namespace project_0.Migrations
 
             modelBuilder.Entity("project_0.Store", b =>
                 {
-                    b.Navigation("orders");
+                    b.Navigation("ItemList");
 
-                    b.Navigation("productList");
+                    b.Navigation("orders");
                 });
 #pragma warning restore 612, 618
         }
