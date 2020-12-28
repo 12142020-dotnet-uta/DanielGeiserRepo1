@@ -47,13 +47,24 @@ namespace project_0
             return select;
         }
 
-        public List<Item> GetItemForStore(int id)
+        public static List<Item> GetItemForStore(int id)
         {
-            List<Item> temp = items.Where(x => x.Id == id).ToList();
-            return temp;
+            List<Item> temp = GetItems();
+            List<Item> temp2 = new List<Item>();
+            foreach(var entry in temp)
+            {
+                if(entry.Id == id)
+                {
+                    temp2.Add(entry);
+                }
+            }
+            return temp2;
         }
 
-
+        public static List<Item> GetItems()
+        {
+            return items.ToList();
+        }
 
         public List<Store> GetStores()
         {

@@ -8,8 +8,8 @@ namespace project_0
     class Cart
     {
         
-        private Customer customer {get; set;}
-        private List<Item> shoppingCart{get; set;} = new List<Item>();
+        public Guid customer {get; set;}
+        public List<Item> shoppingCart{get; set;} = new List<Item>();
 
         
         /// <summary>
@@ -22,7 +22,7 @@ namespace project_0
         }
         public void CustomerGetsCart(Customer c)
         {
-            customer = c;
+            customer = c.Customer_Id;
         }
         public void showCart()
         {

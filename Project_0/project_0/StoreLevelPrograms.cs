@@ -8,11 +8,12 @@ namespace project_0
 
         public static Store ProductSelection(Store store,Customer cc)
         {
-            List<Item> list = Program.storeContext.GetItemForStore(store.Id);
+            List<Item> list = StoreAppRepsitoryLayer.GetItemForStore(store.Id);
             Item tempItem = new Item();
             int pick = 0;
             int quantity = 0;
             int counter = 1;
+
             do{
                 foreach(var entry in list)
                 {
