@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace project_0
+namespace Alt_project0
 {
     public class Orders
     {
@@ -16,10 +16,5 @@ namespace project_0
         [Required,DataType(DataType.DateTime)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime dateTime {get; set;}
-
-        public override string ToString()
-        {
-            return $"Ordered at {stroeLocation.Id}\nTotal was {total}\nat {dateTime}";
-        }
     }
 }

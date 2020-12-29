@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-
-namespace project_0
+namespace Alt_project0
 {
     public class Store
     {
@@ -23,10 +22,18 @@ namespace project_0
             storeName = sname;
             location = loca;
         }
-        /// <summary>
-        /// Adding an item the customer picked into the cart.
-        /// </summary>
-        /// <param name="i"></param>
+        public void AddtoCart(Item i)
+        {
+
+        }
+        public void CustomerGetsCart(Customer c)
+        {
+
+        }
+        public void showCart()
+        {
+            
+        }
 
         public override string ToString()
         {

@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-namespace project_0
+namespace Alt_project0
 {
     
     public class Cart
     {
-        
         [Required]
         public Guid customer {get; set;}
         public List<Item> shoppingCart{get; set;}
@@ -17,6 +17,7 @@ namespace project_0
             shoppingCart = new List<Item>();
 
         }
+
         
         /// <summary>
         /// Adding an item to a cart
@@ -25,10 +26,6 @@ namespace project_0
         public void AddtoCart(Item item)
         {
             shoppingCart.Add(item);
-        }
-        public void CustomerGetsCart(Customer c)
-        {
-            customer = c.Customer_Id;
         }
         public void showCart()
         {

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace project_0.Migrations
 {
-    public partial class TestMigration : Migration
+    public partial class checkingMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -19,6 +19,38 @@ namespace project_0.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_customers", x => x.Customer_Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ItemsAtStore",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id_TO_S = table.Column<int>(type: "int", nullable: false),
+                    productId = table.Column<int>(type: "int", nullable: false),
+                    qty = table.Column<int>(type: "int", nullable: false),
+                    sale = table.Column<double>(type: "float", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ItemsAtStore", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "orderedItems",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    OrderID = table.Column<int>(type: "int", nullable: true),
+                    ProductName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    qtyOrdered = table.Column<int>(type: "int", nullable: false),
+                    pricePaid = table.Column<double>(type: "float", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_orderedItems", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -52,40 +84,12 @@ namespace project_0.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ItemsAtStore",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    productId = table.Column<int>(type: "int", nullable: true),
-                    qty = table.Column<int>(type: "int", nullable: false),
-                    sale = table.Column<double>(type: "float", nullable: false),
-                    StoreId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ItemsAtStore", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ItemsAtStore_products_productId",
-                        column: x => x.productId,
-                        principalTable: "products",
-                        principalColumn: "productId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ItemsAtStore_stores_StoreId",
-                        column: x => x.StoreId,
-                        principalTable: "stores",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "orders",
                 columns: table => new
                 {
                     orderID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    stroeLocationId = table.Column<int>(type: "int", nullable: false),
+                    stroeLocationId = table.Column<int>(type: "int", nullable: true),
                     Customer_Id = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     total = table.Column<double>(type: "float", nullable: false),
                     dateTime = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -104,42 +108,8 @@ namespace project_0.Migrations
                         column: x => x.stroeLocationId,
                         principalTable: "stores",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "orderedItems",
-                columns: table => new
-                {
-                    OrderID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    itemId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_orderedItems", x => x.OrderID);
-                    table.ForeignKey(
-                        name: "FK_orderedItems_ItemsAtStore_itemId",
-                        column: x => x.itemId,
-                        principalTable: "ItemsAtStore",
-                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ItemsAtStore_productId",
-                table: "ItemsAtStore",
-                column: "productId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ItemsAtStore_StoreId",
-                table: "ItemsAtStore",
-                column: "StoreId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_orderedItems_itemId",
-                table: "orderedItems",
-                column: "itemId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_orders_Customer_Id",
@@ -155,19 +125,19 @@ namespace project_0.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "ItemsAtStore");
+
+            migrationBuilder.DropTable(
                 name: "orderedItems");
 
             migrationBuilder.DropTable(
                 name: "orders");
 
             migrationBuilder.DropTable(
-                name: "ItemsAtStore");
+                name: "products");
 
             migrationBuilder.DropTable(
                 name: "customers");
-
-            migrationBuilder.DropTable(
-                name: "products");
 
             migrationBuilder.DropTable(
                 name: "stores");

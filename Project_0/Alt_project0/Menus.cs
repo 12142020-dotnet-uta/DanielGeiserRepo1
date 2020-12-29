@@ -1,11 +1,11 @@
 using System;
 
-namespace project_0
+namespace Alt_project0
 {
     public class Menus
     {
         private int options1 = 1;
-        //private int options2 = 2;
+        private int options2 = 2;
         private int options3 = 3;
         private int options4 = 4;
         private int options5 = 5;
@@ -20,24 +20,20 @@ namespace project_0
             //login, quit, new customer , view stores, 
             int step1 = 0;
             do{
-                Console.WriteLine("Welcome to Kingdom\nThe one stop shop for all your kingdom needs.");
+                Console.WriteLine("Welcome to Kingdom\nThe one stop shop for all you kingdom needs.");
                 Console.WriteLine("1) Login\n2) New Customer\n3) Store list\n4) Quit");
                 step1 = VaildateInput(Console.ReadLine(),options4);
 
             }while(step1 == 0);
             return step1;
         }
-        /// <summary>
-        /// This is the menu for somone who has Logged in.
-        /// </summary>
-        /// <param name="cc"></param>
-        /// <returns></returns>
+        
         public int MainMenuWithLogin(Customer cc)
         {
             //logout, quit, view stores, 
             int step1 = 0;
             do{
-                Console.WriteLine("Welcome {0} {1} to Kingdom\nThe one stop shop for all your kingdom needs.",cc.firstName,cc.lastName);
+                Console.WriteLine("Welcome {0} {1} to Kingdom\nThe one stop shop for all you kingdom needs.",cc.firstName,cc.lastName);
                 Console.WriteLine("1) Logout\n2) Store list\n3) View your Past Oders");
                 step1 = VaildateInput(Console.ReadLine(),options3);
 
@@ -59,7 +55,7 @@ namespace project_0
             int step2 = 0;
             do{
                 Console.WriteLine("{1} {0}\n__________________\nWhat can we help you with?",picked.location,picked.storeName);
-                Console.WriteLine("1) View Cart\n2) List Products\n3) Checkout\n4) Back");
+                Console.WriteLine("1) View Cart\n2) List Products\n3) Checkout\n4) Logout");
                 step2 = VaildateInput(Console.ReadLine(),options4);
 
             }while(step2 == 0);
@@ -78,20 +74,6 @@ namespace project_0
 
             }while(cusM ==0);
         }
-
-        public int SortOrderMenu()
-        {
-            int sorter = 0;
-            do{
-                Console.WriteLine("How would you like to sort the list");
-                Console.WriteLine("1) Earliest\n2) Lastest\n3)Least expensive order"+
-                            "\n4) Most expensive\n5) Back");
-                sorter = VaildateInput(Console.ReadLine(),options5);
-
-            }while(sorter==0);
-            return sorter;
-        }
-
         public void CustomerOrderMenu(Customer cus)
         {
             // This is where a order will be viewed as a whole
@@ -115,30 +97,16 @@ namespace project_0
         public int VaildateInput(string input,int a)
         {
             int response = 0;
-            bool tempResp;
-            do{
-                tempResp = int.TryParse(input, out response);
-                if(tempResp==false)
-                {
-                    Console.WriteLine($"Please enter number from 1 to {a} only!");
-                    input = Console.ReadLine();
-                    response = 0;
-                }
-                else if(response < 0)
-                {
-                    Console.WriteLine($"Please enter number from 1 to {a} only!");
-                    input = Console.ReadLine();
-                    response = 0;
-                }
-                else if(response > a)
-                {
-                    Console.WriteLine($"Please enter number from 1 to {a} only!");
-                    input = Console.ReadLine();
-                    response = 0;
-                }
-
-            }while(response == 0);
-            
+            bool tempResp = int.TryParse(input, out response);
+            if(tempResp==false)
+            {
+                Console.WriteLine("Please enter number from 1 to {o} only!",a);
+                response =0;
+            }
+            else if(response < 0 || response > a)
+            {
+                response =0;
+            }
             return response;
         }
     }

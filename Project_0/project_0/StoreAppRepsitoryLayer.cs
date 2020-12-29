@@ -14,6 +14,7 @@ namespace project_0
         DbSet<OrderedItem> orderedItems = SA_DbContext.orderedItems;
         DbSet<Item> items = SA_DbContext.ItemsAtStore;
         DbSet<Customer> customers = SA_DbContext.customers;
+        DbSet<Product> products = SA_DbContext.products;
 
         /// <summary>
         /// Creates a Customer after verifying that Customer does not already
@@ -39,6 +40,17 @@ namespace project_0
             }
             return c1;
         }
+        public void ProcessOrder(Orders order,List<OrderedItem> list)
+        {
+            int OrderID = orders.Count()+1;
+            orders.Add(order);
+            foreach(var entry in list)
+            {
+                entry.OrderID = OrderID;
+                orderedItems.Add(entry);
+            }
+            SA_DbContext.SaveChanges();
+        }
 
         public Store SelectTheStore(int id)
         {
@@ -47,21 +59,43 @@ namespace project_0
             return select;
         }
 
-        public static List<Item> GetItemForStore(int id)
+        public List<Orders> GetAllPastOrders(Customer c)
         {
-            List<Item> temp = GetItems();
-            List<Item> temp2 = new List<Item>();
-            foreach(var entry in temp)
+            List<Orders> allorders = new List<Orders>();
+
+            var listallorders = from o in orders
+                                where o.customer.Customer_Id == c.Customer_Id
+                                select o;
+            foreach(var q in listallorders)
             {
-                if(entry.Id == id)
-                {
-                    temp2.Add(entry);
-                }
+                allorders.Add(q);
             }
-            return temp2;
+            return allorders;
+        }
+        /// <summary>
+        /// Using a join to combine two tables. It returns a tuple of (int, string, double, int)
+        /// and the values are (productID, productName, product_Price, qty)
+        /// </summary>
+        /// <param name="id"></param>
+        public List<(int,string,double,int)> GetItemForStore(int id)
+        {
+            var itemandproduct = from i in items join p in products on i.productId equals p.productId
+                                where i.Id_TO_S == id
+                                select new {PId = i.productId,Product = p.productName,Price = p.price , Qty = i.qty}; 
+            List<(int,string,double,int)> temp = new List<(int,string,double,int)>();
+            foreach(var entry in itemandproduct)
+            {
+                temp.Add((entry.PId,entry.Product,entry.Price,entry.Qty));
+            }
+            return temp;
+        }
+        public Product GetProduct(int id)
+        {
+            Product p =  products.Where(x => x.productId == id).FirstOrDefault();
+            return p;
         }
 
-        public static List<Item> GetItems()
+        public List<Item> GetItems()
         {
             return items.ToList();
         }

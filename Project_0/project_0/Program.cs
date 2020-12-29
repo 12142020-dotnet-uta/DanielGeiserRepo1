@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace project_0
 {
@@ -10,26 +11,90 @@ namespace project_0
         public static Customer CurrentCustomer = new Customer();
         public static Store myStorePick = new Store();
         public static int process = 0;
+        public static bool firstTime = true;
         static void Main(string[] args)
         {
             int choice;
             int loginDone=0;
             do
             {
-                choice = menus.MainMenuWithoutLogin();
-                if( choice == 1)
+                if(firstTime == true)
                 {
-                    CurrentCustomer = Login();
+                    choice = menus.MainMenuWithoutLogin();
+                    if( choice == 1)
+                    {
+                        Console.Clear();
+                        CurrentCustomer = Login();
+                        firstTime = false;
+                        loginDone = menus.MainMenuWithLogin(CurrentCustomer);
+                        if(loginDone == 1)
+                        {
+                            CurrentCustomer = new Customer();
+                            choice = 0;
+                            firstTime = true;
+                        }
+                        else if(loginDone == 2)
+                        {
+                            myStorePick = StoreSelection();
+                            SecondaryMenu(myStorePick);
+                        }
+                        else if(loginDone == 3)
+                        {
+                            //This will take you to the order menu for the customer
+                            //this is where they will be able to see what they have ordered
+                            List<Orders> pastorders = new List<Orders>();
+                            pastorders = storeContext.GetAllPastOrders(CurrentCustomer);
+                            DisplayPastOrders(pastorders);
+
+                        }
+
+                    }
+                    else if(choice == 2)
+                    {
+                        CurrentCustomer = CreateTheCustomer();
+                        loginDone = menus.MainMenuWithLogin(CurrentCustomer);
+                        if(loginDone == 1)
+                        {
+                            CurrentCustomer = new Customer();
+                            choice = 0;
+                        }
+                        else if(loginDone == 2)
+                        {
+                            myStorePick = StoreSelection();
+                            SecondaryMenu(myStorePick);
+                        }
+                        else if(loginDone == 3)
+                        {
+                            //This will take you to the order menu for the customer
+                            //this is where they will be able to see what they have ordered
+                            
+                        }
+                    }
+                    else if(choice == 3)
+                    {
+                        myStorePick = StoreSelection();
+                        SecondaryMenu(myStorePick);
+                                            
+                    }
+                    else if(choice == 4)
+                    {
+                        process = 1;
+                    }
+
+                }
+                else
+                {
                     loginDone = menus.MainMenuWithLogin(CurrentCustomer);
                     if(loginDone == 1)
                     {
                         CurrentCustomer = new Customer();
                         choice = 0;
+                        firstTime = true;
                     }
                     else if(loginDone == 2)
                     {
                         myStorePick = StoreSelection();
-                        SecondaryMenu(myStorePick,CurrentCustomer);
+                        SecondaryMenu(myStorePick);
                     }
                     else if(loginDone == 3)
                     {
@@ -39,72 +104,99 @@ namespace project_0
                     }
 
                 }
-                else if(choice == 2)
-                {
-                    CurrentCustomer = CreateTheCustomer();
-                    loginDone = menus.MainMenuWithLogin(CurrentCustomer);
-                    if(loginDone == 1)
-                    {
-                        CurrentCustomer = new Customer();
-                        choice = 0;
-                    }
-                    else if(loginDone == 2)
-                    {
-                        myStorePick = StoreSelection();
-                        SecondaryMenu(myStorePick,CurrentCustomer);
-                    }
-                    else if(loginDone == 3)
-                    {
-                        //This will take you to the order menu for the customer
-                        //this is where they will be able to see what they have ordered
-                        
-                    }
-                }
-                else if(choice == 3)
-                {
-                    myStorePick = StoreSelection();
-                    SecondaryMenu(myStorePick,CurrentCustomer);
-                                        
-                }
-                else if(choice == 4)
-                {
-                    process = 1;
-                }
-                
-
 
             }while(process == 0);
 
         }
-        
-        public static void SecondaryMenu(Store store, Customer CCustomer)
+        /// <summary>
+        /// This is just a method to handle the store options once the customer
+        /// has selected a store.1) View Cart 2) List Products 3) Checkout 4) Back
+        /// </summary>
+        /// <param name="store"></param>
+        public static void SecondaryMenu(Store store)
         {
+            
+            while(CurrentCustomer.firstName ==null)
+            {
+                Console.WriteLine("Please Login to continue!");
+                CurrentCustomer = Login();
+                Console.WriteLine($"Welcome {CurrentCustomer.firstName} {CurrentCustomer.lastName} to \n");
+            }
+            List<Item> cart = new List<Item>();
+            Item grabItem = new Item();
+            
             //StoreLevelPrograms slp = new StoreLevelPrograms();
             int tracker = 0;
-            store.CustomerGetsCart(CCustomer);
             do{
                 tracker = menus.StoreMenu(store);
                 if(tracker == 1)
                 {
-                    store.showCart();
+                    showCart(cart);
+                    tracker = 0;
                 }
                 else if(tracker == 2)
                 {
-                    store = StoreLevelPrograms.ProductSelection(store,CCustomer);
-
+                    grabItem = StoreLevelPrograms.ProductSelection(storeContext,store);
+                    bool foundInCart = false;
+                    foreach(var z in cart)
+                    {
+                        if(z.productId ==grabItem.productId)
+                        {
+                            z.qty += grabItem.qty;
+                            foundInCart = true;
+                        }
+                    }
+                    if(foundInCart == false)
+                    {
+                        cart.Add(grabItem);
+                    }
+                    tracker =0;
                 }
                 else if(tracker == 3)
                 {
-
+                    StoreLevelPrograms.CheckOutCounter(storeContext,store,CurrentCustomer,cart);
+                    cart = new List<Item>();
+                    tracker =0;
                 }
                 else if(tracker == 4)
                 {
+                    if(cart.Count != 0)
+                    {
+                        Console.WriteLine("You are leaving your cart of items! Goodbye!");
+                        firstTime = false;
 
-                }
+                    }
+                    else{
+                        Console.WriteLine($"Thank you for visiting {store.storeName}\nGoodbye!");
+                        firstTime = false;
+                    }
+                } 
 
             }while(tracker == 0);
+
             
         }
+        /// <summary>
+        /// This will show the customer what they have in their cart. Will show them how 
+        /// much the total is.
+        /// </summary>
+        /// <param name="a"></param>
+        public static void showCart(List<Item> a)
+        {
+            Product temp = new Product();
+            double tempTotal =0;
+            foreach(var grab in a)
+            {
+                temp = storeContext.GetProduct(grab.productId);
+                Console.WriteLine(grab.qty + " " + temp.ToString());
+                tempTotal = tempTotal + (grab.qty*temp.price);
+            }
+            Console.WriteLine("Current Total: {0:0.00}",tempTotal);
+        }
+        /// <summary>
+        /// Just where we get the first and last name of the customer. Returns Customer Object
+        /// </summary>
+        /// <returns></returns>
         public static Customer Login()
         {
             Customer temp2 = new Customer();
@@ -126,7 +218,11 @@ namespace project_0
 
             return temp2;
         }
-
+        /// <summary>
+        /// The customer already knows they dont have an account so they want
+        /// to make one. Returns Customer object
+        /// </summary>
+        /// <returns></returns>
         public static Customer CreateTheCustomer()
         {
             Customer temp2 = new Customer();
@@ -148,7 +244,11 @@ namespace project_0
 
             return temp2;
         }
-
+        /// <summary>
+        /// Where a list is displayed and the customer chooses which one they
+        /// want to go to. Returns the store object
+        /// </summary>
+        /// <returns></returns>
         public static Store StoreSelection()
         {
             Store myStore = new Store();
@@ -166,6 +266,52 @@ namespace project_0
             }while(myStore == null);
 
             return myStore;
+        }
+        /// <summary>
+        /// This is a void method. It takes a List<Orders> as a parameter
+        /// and will allow the user to select how to sort the orders or
+        /// find the most expensive order or least.
+        /// </summary>
+        /// <param name="lo"></param>
+        public static void DisplayPastOrders(List<Orders> lo)
+        {
+            bool sorter = false;
+            int sort = 0;
+            do{
+                sort = menus.SortOrderMenu();
+                Console.WriteLine();
+                switch(sort)
+                {
+                    case 2:
+                        var temp = lo.OrderByDescending(x => x.dateTime);
+                        foreach(var der in temp)
+                        {
+                            Console.WriteLine($"At {der.stroeLocation.Id} was {der.total} ordered at {der.dateTime}");
+                        }
+                        break;
+                    case 1:
+                        var temp2 = lo.OrderBy(x => x.dateTime);
+                        foreach(var der in temp2)
+                        {
+                            Console.WriteLine($"At {der.stroeLocation.Id} was {der.total} ordered at {der.dateTime}");
+                        }
+                        break;
+                    case 3:
+                        var least = lo.Min(x=> x.total);
+                        Console.WriteLine(least.ToString());
+                        break;
+                    case 4:
+                        var most = lo.Max(x=> x.total);
+                        Console.WriteLine(most.ToString());
+                        break;
+                    case 5:
+                        sorter = true;
+                        break;
+                }
+                
+
+            }while (sorter == false);
+            Console.WriteLine();
         }
         
     }

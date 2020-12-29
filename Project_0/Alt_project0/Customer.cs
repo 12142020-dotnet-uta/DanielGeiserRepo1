@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace project_0
+namespace Alt_project0
 {
     public class Customer
     {
@@ -20,7 +20,7 @@ namespace project_0
         }
         public Customer()
         {
-            
+
         }
         public Customer(string fname, string lname)
         {

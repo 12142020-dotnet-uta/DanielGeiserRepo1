@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace project_0
+namespace Alt_project0
 {
     public class Product
     {
@@ -11,10 +11,5 @@ namespace project_0
         [Required]
         public double price {get; set;}
         public string description {get; set;}
-
-        public override string ToString()
-        {
-            return $"{productName} "+$"@ {price}";
-        }
     }
 }

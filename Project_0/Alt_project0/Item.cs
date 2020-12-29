@@ -1,12 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace project_0
+namespace Alt_project0
 {
     public class Item 
     {
-        [Key]
         public int? Id {get; set;}
-        public int Id_TO_S {get; set;}
         [Required]
         private int Qty;
         private double Sale;

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace project_0
+namespace Alt_project0
 {
     public class OrderedItem 
     {
@@ -12,5 +12,6 @@ namespace project_0
         public int qtyOrdered {get; set;}
 
         public double pricePaid {get; set;}
+        
     }
 }
