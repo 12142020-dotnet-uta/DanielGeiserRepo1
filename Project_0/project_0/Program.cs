@@ -67,7 +67,9 @@ namespace project_0
                         {
                             //This will take you to the order menu for the customer
                             //this is where they will be able to see what they have ordered
-                            
+                            List<Orders> pastorders = new List<Orders>();
+                            pastorders = storeContext.GetAllPastOrders(CurrentCustomer);
+                            DisplayPastOrders(pastorders);
                         }
                     }
                     else if(choice == 3)
@@ -100,6 +102,9 @@ namespace project_0
                     {
                         //This will take you to the order menu for the customer
                         //this is where they will be able to see what they have ordered
+                        List<Orders> pastorders = new List<Orders>();
+                        pastorders = storeContext.GetAllPastOrders(CurrentCustomer);
+                        DisplayPastOrders(pastorders);
 
                     }
 
@@ -115,66 +120,122 @@ namespace project_0
         /// <param name="store"></param>
         public static void SecondaryMenu(Store store)
         {
+            int storeview;
             
-            while(CurrentCustomer.firstName ==null)
+            Console.WriteLine("Store View\n1) Press 1 for Yes\n2) Press 2 for No");
+            storeview = menus.VaildateInput(Console.ReadLine(),2);
+            if(storeview == 1)
             {
-                Console.WriteLine("Please Login to continue!");
-                CurrentCustomer = Login();
-                Console.WriteLine($"Welcome {CurrentCustomer.firstName} {CurrentCustomer.lastName} to \n");
-            }
-            List<Item> cart = new List<Item>();
-            Item grabItem = new Item();
-            
-            //StoreLevelPrograms slp = new StoreLevelPrograms();
-            int tracker = 0;
-            do{
-                tracker = menus.StoreMenu(store);
-                if(tracker == 1)
-                {
-                    showCart(cart);
-                    tracker = 0;
-                }
-                else if(tracker == 2)
-                {
-                    grabItem = StoreLevelPrograms.ProductSelection(storeContext,store);
-                    bool foundInCart = false;
-                    foreach(var z in cart)
+                bool sv = false;
+                int options;
+                do{
+                    options = menus.StoreViewMenu(store);
+                    if(options == 1)
                     {
-                        if(z.productId ==grabItem.productId)
-                        {
-                            z.qty += grabItem.qty;
-                            foundInCart = true;
+                        List<Orders> pastorders = new List<Orders>();
+                        pastorders = storeContext.GetAllStorePastOrders(store);
+                        DisplayPastOrders(pastorders);
+
+                    }
+                    else if(options == 2)
+                    {
+                        string search = "";
+                        List<Customer> storeCustomers = new List<Customer>();
+                        while(search == ""){
+                            Console.WriteLine("What Customer Name would you like to search?");
+                            search = Console.ReadLine();
                         }
+
+                        try{
+                            storeCustomers = storeContext.GetListMatchingName(search);
+                            if(storeCustomers.Count() != 0)
+                            {
+                                foreach(var c in storeCustomers)
+                                {
+                                    Console.WriteLine($"{c.firstName} {c.lastName} {c.favstore}");
+                                }
+                            }
+                            else{
+                                throw new Exception("There was No one matching the name you gave.");
+                            }
+
+                        }catch(Exception e)
+                        {
+                            Console.WriteLine(e);
+                        }
+                        storeCustomers = storeContext.GetListMatchingName(search);
+
                     }
-                    if(foundInCart == false)
+                    else if(options == 3)
                     {
-                        cart.Add(grabItem);
+                        sv = true;
                     }
-                    tracker =0;
-                }
-                else if(tracker == 3)
+
+
+                }while(sv==false);
+            }
+            else
+            {
+                while(CurrentCustomer.firstName ==null)
                 {
-                    StoreLevelPrograms.CheckOutCounter(storeContext,store,CurrentCustomer,cart);
-                    cart = new List<Item>();
-                    tracker =0;
+                    Console.WriteLine("Please Login to continue!");
+                    CurrentCustomer = Login();
+                    Console.WriteLine($"Welcome {CurrentCustomer.firstName} {CurrentCustomer.lastName} to \n");
                 }
-                else if(tracker == 4)
-                {
-                    if(cart.Count != 0)
+                List<Item> cart = new List<Item>();
+                Item grabItem = new Item();
+                
+                //StoreLevelPrograms slp = new StoreLevelPrograms();
+                int tracker = 0;
+                do{
+                    tracker = menus.StoreMenu(store);
+                    if(tracker == 1)
                     {
-                        Console.WriteLine("You are leaving your cart of items! Goodbye!");
-                        firstTime = false;
-
+                        showCart(cart);
+                        tracker = 0;
                     }
-                    else{
-                        Console.WriteLine($"Thank you for visiting {store.storeName}\nGoodbye!");
-                        firstTime = false;
+                    else if(tracker == 2)
+                    {
+                        grabItem = StoreLevelPrograms.ProductSelection(storeContext,store);
+                        storeContext.PremadeItemGrabed(grabItem);
+                        storeContext.ItemWasGrabed(grabItem);
+                        bool foundInCart = false;
+                        foreach(var z in cart)
+                        {
+                            if(z.productId == grabItem.productId)
+                            {
+                                z.qty += grabItem.qty;
+                                foundInCart = true;
+                            }
+                        }
+                        if(foundInCart == false && grabItem.qty > 0)
+                        {
+                            cart.Add(grabItem);
+                        }
+                        tracker =0;
                     }
-                } 
+                    else if(tracker == 3)
+                    {
+                        StoreLevelPrograms.CheckOutCounter(storeContext,store,CurrentCustomer,cart);
+                        cart = new List<Item>();
+                        tracker =0;
+                    }
+                    else if(tracker == 4)
+                    {
+                        if(cart.Count != 0)
+                        {
+                            Console.WriteLine("You are leaving your cart of items! Goodbye!");
+                            firstTime = false;
 
-            }while(tracker == 0);
+                        }
+                        else{
+                            Console.WriteLine($"Thank you for visiting {store.storeName}\nGoodbye!");
+                            firstTime = false;
+                        }
+                    } 
 
-            
+                }while(tracker == 0);
+            }
         }
         /// <summary>
         /// This will show the customer what they have in their cart. Will show them how 
@@ -305,6 +366,8 @@ namespace project_0
                         Console.WriteLine(most.ToString());
                         break;
                     case 5:
+                        break;
+                    case 6:
                         sorter = true;
                         break;
                 }

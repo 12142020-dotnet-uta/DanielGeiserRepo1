@@ -11,9 +11,11 @@ namespace project_0
         {
             List<(int,string,double,int)> list = context.GetItemForStore((int)store.Id);
             Item tempItem = new Item();
+            tempItem.Id_TO_S = (int)store.Id;
             int pick = 0;
             int quantity = 0;
             int counter = 1;
+            int Checkqty;
 
             do{
                 foreach(var entry in list)
@@ -24,9 +26,11 @@ namespace project_0
                 Console.WriteLine("\nWhich Product would you like to get?");
                 pick =Program.menus.VaildateInput(Console.ReadLine(),list.Count);
                 tempItem.productId = list[pick-1].Item1;
+                tempItem.qty = list[pick-1].Item4;
                 Console.WriteLine("\nHow many of {0} would you like? Max is {1}",list[pick-1].Item2, list[pick-1].Item4);
                 quantity = Program.menus.VaildateInput(Console.ReadLine(),list[pick-1].Item4);
-                tempItem.qty = quantity;
+                Checkqty = context.TooManyGrabed(tempItem,quantity);
+                tempItem.qty = Checkqty;
             }while(tempItem == null);
 
             return tempItem;
@@ -54,7 +58,7 @@ namespace project_0
             order.total = tempTotal;
             order.dateTime= DateTime.Now;
 
-            context.ProcessOrder(order,list);
+            context.ProcessOrder(order,list,store);
         }
         
     }

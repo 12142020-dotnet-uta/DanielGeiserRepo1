@@ -1,14 +1,15 @@
 using System;
+using System.Collections.Generic;
 
 namespace project_0
 {
     public class Menus
     {
-        private int options1 = 1;
+        //private int options1 = 1;
         //private int options2 = 2;
         private int options3 = 3;
         private int options4 = 4;
-        private int options5 = 5;
+        private int options6 = 6;
 
         /// <summary>
         /// This will continue to show the Main menu until an acceptable 
@@ -84,27 +85,31 @@ namespace project_0
             int sorter = 0;
             do{
                 Console.WriteLine("How would you like to sort the list");
-                Console.WriteLine("1) Earliest\n2) Lastest\n3)Least expensive order"+
-                            "\n4) Most expensive\n5) Back");
-                sorter = VaildateInput(Console.ReadLine(),options5);
+                Console.WriteLine("1) Earliest\n2) Lastest\n3) Least expensive order"+
+                            "\n4) Most expensive\n5) Full Order Details\n6) Back");
+                sorter = VaildateInput(Console.ReadLine(),options6);
 
             }while(sorter==0);
             return sorter;
         }
-
-        public void CustomerOrderMenu(Customer cus)
+        /// <summary>
+        /// This gives a store view which allows the viewing of all orders from that store
+        /// and to find a customer by name
+        /// </summary>
+        /// <param name="selection"></param>
+        public int StoreViewMenu(Store selection)
         {
             // This is where a order will be viewed as a whole
             // the menu before will only have the store, amount charged, but this will
             // have all the items, how many of them were ordered, and everything else.
             int response = 0;
             do{
-                Console.WriteLine("Hello, {0} {1}\nHow may we help you?",cus.firstName,cus.lastName);
-                Console.WriteLine("1) Back");
-                response = VaildateInput(Console.ReadLine(),options1);
+                Console.WriteLine("Hello, {0} {1} Total Sales {2}\nWhat do you want to see about the Store?",selection.storeName,selection.location,selection.totalSales);
+                Console.WriteLine("1) All Orders at this Store\n2) Find Customer by Name\n3) Back");
+                response = VaildateInput(Console.ReadLine(),options3);
 
             }while(response == 0);
-           
+           return response;
         }
         /// <summary>
         /// This function accepts a string from ReadLine and will vaildate from a number 
@@ -116,6 +121,7 @@ namespace project_0
         {
             int response = 0;
             bool tempResp;
+            bool anOut = false;
             do{
                 tempResp = int.TryParse(input, out response);
                 if(tempResp==false)
@@ -136,10 +142,38 @@ namespace project_0
                     input = Console.ReadLine();
                     response = 0;
                 }
-
-            }while(response == 0);
+                else if(response == 0)
+                {
+                    response = 1;
+                    anOut = true;
+                }
+                else{
+                    anOut=true;
+                }
+            }while(anOut == false);
             
             return response;
+        }
+
+        public void OrderFullDetail(List<Orders> list)
+        {
+            Orders tempOrder = new Orders();
+            int pick = 0;
+            int quantity = 0;
+            int counter = 1;
+            int Checkqty;
+
+            do{
+                foreach(var entry in list)
+                {
+                    Console.WriteLine(counter + ") " + entry.ToString());
+                    counter++;
+                }
+                Console.WriteLine("\nWhich Product would you like to get?");
+                pick =Program.menus.VaildateInput(Console.ReadLine(),list.Count);
+                tempOrder = list[pick-1];
+            }while(tempOrder == null);
+
         }
     }
 }
