@@ -15,6 +15,12 @@ namespace RpsGame_refactored_Db
         DbSet<Match> matches = DbContext.matches;
         DbSet<Round> rounds = DbContext.rounds;
 
+        public RpsGameRepositoryLayer(){}
+        public RpsGameRepositoryLayer(RpsDbContext context)
+        {
+            RpsGameRepositoryLayer.DbContext= context;
+        }
+
         /// <summary>
         /// Creates a player after verifying that the player does not already exist. returns the player obj
         /// </summary>
