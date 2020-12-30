@@ -6,7 +6,7 @@ namespace project_0
     public class Menus
     {
         //private int options1 = 1;
-        //private int options2 = 2;
+        private int options2 = 2;
         private int options3 = 3;
         private int options4 = 4;
         private int options6 = 6;
@@ -155,25 +155,42 @@ namespace project_0
             return response;
         }
 
-        public void OrderFullDetail(List<Orders> list)
+        public void OrderFullDetail(List<Orders> list, StoreAppRepsitoryLayer context)
         {
             Orders tempOrder = new Orders();
             int pick = 0;
             int quantity = 0;
             int counter = 1;
-            int Checkqty;
+            int cont = 0;
 
             do{
                 foreach(var entry in list)
                 {
-                    Console.WriteLine(counter + ") " + entry.ToString());
+                    Console.WriteLine(counter + ") " + "{0} Total: {1} Date and Time :"+
+                        " {2}",entry.stroeLocation,entry.total,entry.dateTime);
                     counter++;
                 }
                 Console.WriteLine("\nWhich Product would you like to get?");
                 pick =Program.menus.VaildateInput(Console.ReadLine(),list.Count);
                 tempOrder = list[pick-1];
-            }while(tempOrder == null);
+                if(tempOrder != null)
+                {
+                    context.FullOrderDisplay(tempOrder);
+                    Console.WriteLine("View another?\n1) Press 1 for yes2) Press 2 for no");
+                    cont = VaildateInput(Console.ReadLine(),options2);
+                    if(cont == 1)
+                    {
+                        pick = 0;
+                        tempOrder = new Orders();
+                        counter = 1;
+                    }
+                    else if(cont == 2){
+                        quantity = 1;
+                    }
 
+                }
+
+            }while(quantity == 0);
         }
     }
 }

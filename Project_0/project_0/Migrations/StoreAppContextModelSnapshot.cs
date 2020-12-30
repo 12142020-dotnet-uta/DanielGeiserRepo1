@@ -141,7 +141,7 @@ namespace project_0.Migrations
 
             modelBuilder.Entity("project_0.Store", b =>
                 {
-                    b.Property<int?>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .UseIdentityColumn();

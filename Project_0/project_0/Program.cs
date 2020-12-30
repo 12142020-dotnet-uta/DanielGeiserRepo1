@@ -42,8 +42,7 @@ namespace project_0
                         {
                             //This will take you to the order menu for the customer
                             //this is where they will be able to see what they have ordered
-                            List<Orders> pastorders = new List<Orders>();
-                            pastorders = storeContext.GetAllPastOrders(CurrentCustomer);
+                            List<Orders> pastorders = pastorders = storeContext.GetAllPastOrders(CurrentCustomer);
                             DisplayPastOrders(pastorders);
 
                         }
@@ -67,8 +66,7 @@ namespace project_0
                         {
                             //This will take you to the order menu for the customer
                             //this is where they will be able to see what they have ordered
-                            List<Orders> pastorders = new List<Orders>();
-                            pastorders = storeContext.GetAllPastOrders(CurrentCustomer);
+                            List<Orders> pastorders = pastorders = storeContext.GetAllPastOrders(CurrentCustomer);
                             DisplayPastOrders(pastorders);
                         }
                     }
@@ -102,8 +100,7 @@ namespace project_0
                     {
                         //This will take you to the order menu for the customer
                         //this is where they will be able to see what they have ordered
-                        List<Orders> pastorders = new List<Orders>();
-                        pastorders = storeContext.GetAllPastOrders(CurrentCustomer);
+                        List<Orders> pastorders = pastorders = storeContext.GetAllPastOrders(CurrentCustomer);
                         DisplayPastOrders(pastorders);
 
                     }
@@ -132,8 +129,7 @@ namespace project_0
                     options = menus.StoreViewMenu(store);
                     if(options == 1)
                     {
-                        List<Orders> pastorders = new List<Orders>();
-                        pastorders = storeContext.GetAllStorePastOrders(store);
+                        List<Orders> pastorders = pastorders = storeContext.GetAllStorePastOrders(store);
                         DisplayPastOrders(pastorders);
 
                     }
@@ -347,15 +343,17 @@ namespace project_0
                         var temp = lo.OrderByDescending(x => x.dateTime);
                         foreach(var der in temp)
                         {
-                            Console.WriteLine($"At {der.stroeLocation.Id} was {der.total} ordered at {der.dateTime}");
+                            Console.WriteLine($"At {der.stroeLocation} was {der.total} ordered at {der.dateTime}");
                         }
+                        Console.WriteLine();
                         break;
                     case 1:
                         var temp2 = lo.OrderBy(x => x.dateTime);
                         foreach(var der in temp2)
                         {
-                            Console.WriteLine($"At {der.stroeLocation.Id} was {der.total} ordered at {der.dateTime}");
+                            Console.WriteLine($"At {der.stroeLocation} was {der.total} ordered at {der.dateTime}");
                         }
+                        Console.WriteLine();
                         break;
                     case 3:
                         var least = lo.Min(x=> x.total);
@@ -364,18 +362,19 @@ namespace project_0
                     case 4:
                         var most = lo.Max(x=> x.total);
                         Console.WriteLine(most.ToString());
+                        Console.WriteLine();
                         break;
                     case 5:
+                        menus.OrderFullDetail(lo,storeContext);
+                        Console.WriteLine();
                         break;
                     case 6:
                         sorter = true;
                         break;
                 }
-                
 
             }while (sorter == false);
             Console.WriteLine();
         }
-        
     }
 }

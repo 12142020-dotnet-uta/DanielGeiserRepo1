@@ -8,7 +8,7 @@ namespace project_0
 {
     public class Store
     {
-        public int? Id {get; set;}
+        public int Id {get; set;}
         [Required]
         public string storeName {get; set;}
         [Required]

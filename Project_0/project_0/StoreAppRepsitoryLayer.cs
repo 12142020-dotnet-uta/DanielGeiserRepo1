@@ -123,6 +123,31 @@ namespace project_0
             return p;
         }
 
+        public void FullOrderDisplay(Orders ord)
+        {
+            try{
+
+                //Havind a issue with getting store info
+                //
+                //Store temp = stores.Where(x => x.Id == ord.stroeLocation.Id).FirstOrDefault();
+                var query = from orderitem in orderedItems join od in orders on orderitem.OrderID equals od.orderID
+                        where od.orderID == ord.orderID
+                        select new {time = od.dateTime,PN=orderitem.ProductName,PP = orderitem.pricePaid, QT = orderitem.qtyOrdered};
+            
+                Console.WriteLine("Date and Time: {0}",ord.dateTime);
+                foreach(var fd in query)
+                {
+                    Console.WriteLine(fd.PN+" " + fd.QT + " @ "+fd.PP+" ==> "+(fd.PP*fd.QT));
+                }
+                Console.WriteLine("\t\tTotal: "+ ord.total);
+
+            }catch(Exception e)
+            {
+                Console.WriteLine("Join not working"+e);
+            }
+            
+        }
+
         public List<Item> GetItems()
         {
             return items.ToList();
