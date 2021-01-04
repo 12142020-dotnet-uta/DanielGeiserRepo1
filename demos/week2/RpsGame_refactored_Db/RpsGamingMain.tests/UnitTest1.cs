@@ -12,9 +12,8 @@ namespace RpsGamingMain.tests
         {
             // arrange
             // Creating the in-memory Db
-            var options = new DbContextOptionsBuilder<RpsDbContext>()
-                        .UseInMemoryDatabaseName(databaseName: "TestDb")
-                        .options;
+            var options = new DbContextOptionsBuilder<RpsDbContext>().UseInMemoryDatabase(databaseName: "TestDb").Options;
+            int z;
             // act
             // add to the In-memory Db
             using(var context = new RpsDbContext(options))
@@ -23,10 +22,12 @@ namespace RpsGamingMain.tests
                 context.Database.EnsureCreated();
 
                 RpsGameRepositoryLayer repo = new RpsGameRepositoryLayer(context);
+                
 
                 int x = 4;
                 int y = 5;
-                int z = x + y;
+                z = x + y;
+                context.SaveChanges();
 
             }
           
@@ -63,6 +64,38 @@ namespace RpsGamingMain.tests
 
             //assert
             Assert.NotEqual(13,z);
+        }
+
+        [Fact]//the name of the function should tell the user what the function is doing
+        public void CreatePlayerSavesANewPlayerToTheDb()
+        {
+            // arrange
+            // Creating the in-memory Db
+            var options = new DbContextOptionsBuilder<RpsDbContext>().UseInMemoryDatabase(databaseName: "TestDb").Options;
+      
+            // act
+            // add to the In-memory Db
+            Player p1 = new Player();
+            using(var context = new RpsDbContext(options))
+            {
+                context.Database.EnsureDeleted();
+                context.Database.EnsureCreated();
+
+                RpsGameRepositoryLayer repo = new RpsGameRepositoryLayer(context);
+                
+                p1 = repo.CreatePlayer("sparky", "jones");
+                //context.SaveChanges();
+            }
+          
+
+            // assert
+            // verify the results was as expected
+            using(var context = new RpsDbContext(options))
+            {
+                RpsGameRepositoryLayer repo = new RpsGameRepositoryLayer(context);
+                Player result = repo.CreatePlayer("sparky", "jones");
+                Assert.Matches(p1.PlayerId.ToString(), result.PlayerId.ToString());
+            }
         }
 
     }
