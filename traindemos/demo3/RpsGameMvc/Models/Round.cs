@@ -1,0 +1,22 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
+
+namespace RpsGameMvc.Models
+{
+    public class Round
+    {
+        private Guid roundId = Guid.NewGuid();
+        [Key]
+        public Guid RoundId { get { return roundId; } set { roundId = value; } }
+        public Choice Player1Choice { get; set; } // always the computer
+        public Choice Player2Choice { get; set; } // always the user
+        public Player WinningPlayer { get; set; } = new Player()
+        {
+            Fname = "TieGame",
+            Lname = "TieGame"
+        };
+    }
+}

@@ -84,7 +84,7 @@ namespace RpsGamingMain.tests
                 RpsGameRepositoryLayer repo = new RpsGameRepositoryLayer(context);
                 
                 p1 = repo.CreatePlayer("sparky", "jones");
-                //context.SaveChanges();
+                context.SaveChanges();
             }
           
 
@@ -94,7 +94,7 @@ namespace RpsGamingMain.tests
             {
                 RpsGameRepositoryLayer repo = new RpsGameRepositoryLayer(context);
                 Player result = repo.CreatePlayer("sparky", "jones");
-                Assert.Matches(p1.PlayerId.ToString(), result.PlayerId.ToString());
+                Assert.True(p1.PlayerId.Equals(result.PlayerId));
             }
         }
 

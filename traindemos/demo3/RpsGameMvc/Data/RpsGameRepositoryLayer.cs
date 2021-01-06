@@ -1,27 +1,27 @@
+﻿using System;
 using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using System;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using RpsGameMvc.Models;
 
-namespace RpsGame_refactored_Db
+
+namespace RpsGameMvc.Data
 {
     public class RpsGameRepositoryLayer
     {
-        
+
         int numberOfChoices = Enum.GetNames(typeof(Choice)).Length; // get a always-current number of options of Enum Choice
         Random randomNumber = new Random((int)DateTime.Now.Millisecond); // create a random number object
-        RpsDbContext DbContext;// = new RpsDbContext();
-        DbSet<Player> players;// = DbContext.players;
-        DbSet<Match> matches;// = DbContext.matches;
-        DbSet<Round> rounds;// = DbContext.rounds;
+        static RpsDbContext DbContext = new RpsDbContext();
+        DbSet<Player> players = DbContext.players;
+        DbSet<Match> matches = DbContext.matches;
+        DbSet<Round> rounds = DbContext.rounds;
 
-        public RpsGameRepositoryLayer(){}
+        public RpsGameRepositoryLayer() { }
         public RpsGameRepositoryLayer(RpsDbContext context)
         {
-            DbContext= context;
-            players = DbContext.players;
-            matches = DbContext.matches;
-            rounds = DbContext.rounds;
+            RpsGameRepositoryLayer.DbContext = context;
         }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace RpsGame_refactored_Db
         /// <returns></returns>
         public Player CreatePlayer(string fName = "null", string lName = "null")
         {
-            
+
             Player p1 = new Player();
             p1 = players.Where(x => x.Fname == fName && x.Lname == lName).FirstOrDefault();
 

@@ -1,28 +1,30 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System;
 using System.Collections.Generic;
-using System;
+using System.Linq;
+using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
-namespace RpsGame_refactored_Db
+namespace ModelLayer
 {
     public class Match
     {
-        private Guid matchID = Guid.NewGuid();
         [Key]
-        public Guid MatchId { get{ return matchID; } set{ matchID = value;} }
+        public Guid MatchId { get; set; } = Guid.NewGuid();
         public Player Player1 { get; set; } // always the computer
         public Player Player2 { get; set; } // always the user.
 
         public List<Round> Rounds = new List<Round>();
-
+        [Range(0,2)]
         private int p1RoundWins { get; set; } // ho many rounds has the player won?
+        [Range(0, 2)]
         private int p2RoundWins { get; set; }
+        [Range(0, int.MaxValue)]
         private int ties { get; set; }
 
 
         /// <summary>
         /// This is the description of the method called RoundWinner
-        /// This methodtakes an optional Player object and increments the 
-        /// numnber of round wins for that player.
+        /// This methodtakes an optional Player object and increments the numnber of round wins for that player.
         /// no arguments means a tie.
         /// </summary>
         /// <param name="p"></param>
@@ -58,6 +60,4 @@ namespace RpsGame_refactored_Db
             }
         }
     }
-
-
 }
