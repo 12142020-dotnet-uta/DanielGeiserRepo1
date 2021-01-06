@@ -1,9 +1,11 @@
+using BusinessLogicLayer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using RespositoryLayer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +26,10 @@ namespace _12142020_MvcRpsDemo
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddScoped<DbContextClass>();
+            services.AddScoped<Repository>();
+            services.AddScoped<BusinessLogicClass>();
+            services.AddScoped<MapperClass>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
