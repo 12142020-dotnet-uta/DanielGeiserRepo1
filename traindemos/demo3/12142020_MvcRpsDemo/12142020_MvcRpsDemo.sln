@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "12142020_MvcRpsDemo", "1214
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLogicLayer", "BusinessLogicLayer\BusinessLogicLayer.csproj", "{F21CB8F6-A895-49A1-B86E-66FABB0C2756}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RepositoryLayer", "RepositoryLayer\RepositoryLayer.csproj", "{F8C8DEF5-64A9-40FA-9A44-1F889083B213}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RepositoryLayer", "RespositoryLayer\RespositoryLayer.csproj", "{F8C8DEF5-64A9-40FA-9A44-1F889083B213}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelLayer", "ModelLayer\ModelLayer.csproj", "{285AE735-3E57-4ADF-84BC-BC9DAF479B5C}"
 EndProject

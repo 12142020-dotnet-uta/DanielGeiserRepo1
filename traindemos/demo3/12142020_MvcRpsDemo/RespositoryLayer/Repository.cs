@@ -43,7 +43,7 @@ namespace RespositoryLayer
 
 				try
 				{
-					Player player2 = players.FirstOrDefault(x => x.PlayerId == player1.PlayerId);// check if the player is in the Db
+					Player player2 = players.FirstOrDefault(x => x.playerId == player1.playerId);// check if the player is in the Db
 					return player2;
 				}
 				catch (ArgumentNullException ex)
@@ -56,7 +56,7 @@ namespace RespositoryLayer
 
 		public Player GetPlayerById(Guid id)
         {
-            Player player1 = players.FirstOrDefault(x => x.PlayerId == id);
+            Player player1 = players.FirstOrDefault(x => x.playerId == id);
 
             return player1;
 
@@ -70,7 +70,7 @@ namespace RespositoryLayer
 		public Player EditPlayer(Player player)
 		{
 			// search Db for the player
-			Player player1 = GetPlayerById(player.PlayerId);
+			Player player1 = GetPlayerById(player.playerId);
 
 			// transfer over all the new values
 			player1.Fname = player.Fname;
@@ -81,7 +81,7 @@ namespace RespositoryLayer
 			_dbContext.SaveChanges();
 
 			// search the player again to verify that the new player is in the Db
-			Player player2 = GetPlayerById(player.PlayerId);
+			Player player2 = GetPlayerById(player.playerId);
 			// return the edited Player
 			return player2;
 		}
