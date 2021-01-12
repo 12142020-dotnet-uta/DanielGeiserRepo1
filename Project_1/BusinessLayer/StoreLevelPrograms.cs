@@ -1,13 +1,17 @@
-﻿using ModelLayer;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using ModelLayer;
 using RepositoryLayer;
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Text;
 
 namespace BusinessLayer
 {
     public class StoreLevelPrograms
     {
+        //private static StoreAppRepsitoryLayer storeAppRepsitoryLayer;
+
         public static Item ProductSelection(StoreAppRepsitoryLayer context, Store store)
         {
             List<(int, string, double, int)> list = context.GetItemForStore((int)store.Id);
@@ -26,11 +30,11 @@ namespace BusinessLayer
                     counter++;
                 }
                 Console.WriteLine("\nWhich Product would you like to get?");
-                pick = Program.menus.VaildateInput(Console.ReadLine(), list.Count);
+                pick = 0;//Program.menus.VaildateInput(Console.ReadLine(), list.Count);
                 tempItem.productId = list[pick - 1].Item1;
                 tempItem.qty = list[pick - 1].Item4;
                 Console.WriteLine("\nHow many of {0} would you like? Max is {1}", list[pick - 1].Item2, list[pick - 1].Item4);
-                quantity = Program.menus.VaildateInput(Console.ReadLine(), list[pick - 1].Item4);
+                quantity = 1;// Program.menus.VaildateInput(Console.ReadLine(), list[pick - 1].Item4);
                 Checkqty = context.TooManyGrabed(tempItem, quantity);
                 tempItem.qty = Checkqty;
             } while (tempItem == null);
@@ -61,6 +65,19 @@ namespace BusinessLayer
             order.dateTime = DateTime.Now;
 
             context.ProcessOrder(order, list, store);
+        }
+
+        public ClaimsIdentity Authenticate(string username, string password)
+        {
+            StoreAppRepsitoryLayer storeAppRepsitoryLayer = new StoreAppRepsitoryLayer();
+            return storeAppRepsitoryLayer.Authenticate(username,password);
+        }
+
+        public List<Store> GetStores()
+        {
+            StoreAppRepsitoryLayer storeAppRepsitoryLayer = new StoreAppRepsitoryLayer();
+
+            return storeAppRepsitoryLayer.GetStores();
         }
 
     }

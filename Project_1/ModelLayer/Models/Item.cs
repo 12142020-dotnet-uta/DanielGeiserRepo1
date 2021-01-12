@@ -12,6 +12,7 @@ namespace ModelLayer
         public int? Id {get; set;}
         public int Id_TO_S {get; set;}
         [Required]
+        [Display(Name ="Qu  ")]
         private int Qty;
         private double Sale;
         [Required]

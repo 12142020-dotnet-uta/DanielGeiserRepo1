@@ -10,9 +10,16 @@ namespace ModelLayer
     {
         [Key]
         public Guid Customer_Id { get; set; } = new Guid();
-        [Required, MinLength(2)]
+
+        [StringLength(20, ErrorMessage = "The first name must be from 3 to 20 characters.", MinimumLength = 3)]
+        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Use letters only please")]
+        [Required]
+        [Display(Name = "First Name")]
         public string firstName { get; set; }
-        [Required, MinLength(2)]
+        [StringLength(20, ErrorMessage = "The Last name must be from 3 to 20 characters.", MinimumLength = 3)]
+        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Use letters only please")]
+        [Required]
+        [Display(Name = "Last Name")] 
         public string lastName { get; set; }
         private string FavStore;
         public string favstore
@@ -20,6 +27,10 @@ namespace ModelLayer
             get { return FavStore; }
             set { FavStore = value != null ? "No where" : value; }
         }
+        [Display(Name = "Administrator")]
+        public Boolean Addmin { get; set; } = false;
+        public byte[] ByteArrayImage { get; set; }
+
         public Customer()
         {
 

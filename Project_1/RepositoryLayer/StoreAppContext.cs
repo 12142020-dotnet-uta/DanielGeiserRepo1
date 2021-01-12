@@ -14,6 +14,7 @@ namespace RepositoryLayer
         public DbSet<Item> ItemsAtStore { get; set; }
         public DbSet<OrderedItem> orderedItems { get; set; }
         public DbSet<Store> stores { get; set; }
+        public DbSet<Cart> cart { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {

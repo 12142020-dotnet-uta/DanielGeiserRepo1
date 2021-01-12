@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BusinessLayer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using ModelLayer;
 using project_1.Models;
 using System;
 using System.Collections.Generic;
@@ -16,6 +18,15 @@ namespace project_1.Controllers
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
+        }
+
+        public IActionResult MainPage()
+        {
+            List<Store> list = new List<Store>();
+            StoreLevelPrograms storeLevelPrograms = new StoreLevelPrograms();
+            list = storeLevelPrograms.GetStores();
+
+            return View("MainPageStoreViewModel",list);
         }
 
         public IActionResult Index()

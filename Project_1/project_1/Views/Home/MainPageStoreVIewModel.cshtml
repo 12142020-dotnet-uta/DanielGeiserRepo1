@@ -1,0 +1,45 @@
+﻿@model IEnumerable<ModelLayer.Store>
+
+@{
+    ViewData["Title"] = "MainPageStoreVIewModel";
+}
+
+<h1>MainPageStoreVIewModel</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.storeName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.location)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.totalSales)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.storeName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.location)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.totalSales)
+            </td>
+            <td>
+                <button type="button" onclick="alert('you picked @item.storeName')">Select</button>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

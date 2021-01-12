@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using ModelLayer;
 using ModelLayer.Models;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace RepositoryLayer
 {
@@ -17,6 +19,7 @@ namespace RepositoryLayer
         DbSet<Item> items = SA_DbContext.ItemsAtStore;
         DbSet<Customer> customers = SA_DbContext.customers;
         DbSet<Product> products = SA_DbContext.products;
+        DbSet<Cart> carts = SA_DbContext.cart;
 
         /// <summary>
         /// Creates a Customer after verifying that Customer does not already
@@ -292,5 +295,23 @@ namespace RepositoryLayer
 
             return agreed;
         }
+        public ClaimsIdentity Authenticate(string username, string password)
+        {
+             Customer user = CreateCustomer(username, password);
+             if (user == null || user.lastName != password) return null;
+
+             var claims = new List<Claim>
+             {
+                 new Claim("Id", user.Customer_Id.ToString()),
+                 new Claim(ClaimTypes.Name, user.firstName),
+                 new Claim(ClaimTypes.NameIdentifier, user.firstName)
+             };
+             if (user.Addmin) claims.Add(new Claim("IsAdmin", "Yes"));
+
+            return new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+        }
+
+        
+
     }
 }

@@ -8,6 +8,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using project_1.Security;
+using Microsoft.AspNetCore.Authentication;
+using RepositoryLayer;
+using BusinessLayer;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace project_1
 {
@@ -23,7 +33,26 @@ namespace project_1
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+          
+            services.AddAuthorization( options =>
+            {
+                options.AddPolicy("IsAdmin", policyBuilder => policyBuilder.RequireClaim("IsAdmin"));
+                options.AddPolicy("CanAccessStore", policyBuilder => policyBuilder.Requirements.Add(new CanAccessStore()));
+            });
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
+
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
+
+            services.AddSingleton<IAuthorizationHandler, CanAccessUserHandler>();
+            services.AddScoped<AuthenticationService>();
+            services.AddScoped<StoreAppContext>();
+            services.AddScoped<MapperClass>();
             services.AddControllersWithViews();
+            services.AddRazorPages();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,13 +73,15 @@ namespace project_1
 
             app.UseRouting();
 
+            app.UseAuthentication();
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=MainPage}/{id?}");
             });
         }
     }

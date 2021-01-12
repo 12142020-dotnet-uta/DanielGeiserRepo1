@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - project_1</title>
+    <title>Kingdom Stores</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
@@ -17,14 +17,29 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                    <ol class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-                    </ul>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item" style="float:right!important">
+                                <a class="nav-link text-dark" asp-controller="Customer" asp-action="Logout">Logout</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item" style="float:right!important">
+                                <a class="nav-link text-dark" asp-controller="Customer" asp-action="CustomerLogin">Login</a>
+                            </li>
+                        }
+                        <li class="nav-item" style="float:right!important">
+                            <a class="nav-link text-dark" asp-controller="Cart" asp-action="ViewCart" >Cart</a>
+                        </li>
+                    </ol>
                 </div>
             </div>
         </nav>
