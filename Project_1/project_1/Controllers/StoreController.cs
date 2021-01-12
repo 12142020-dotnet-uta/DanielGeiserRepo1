@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BusinessLayer;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using ModelLayer.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,23 +12,28 @@ namespace project_1.Controllers
 {
     public class StoreController : Controller
     {
+        private StoreLevelPrograms _storeLevelPrograms;
+        private readonly ILogger<StoreController> _logger;
+        public StoreController(StoreLevelPrograms storeLevelPrograms, ILogger<StoreController> logger)
+        {
+            _storeLevelPrograms = storeLevelPrograms;
+            _logger = logger;
+        }
+
         // GET: StoreController
         public ActionResult Index()
         {
             return View();
         }
 
-        [HttpGet]
-        public ActionResult GetItemsForStore(int id)
+        public ActionResult GetStoreInvertory(int id)
         {
-            return View();
-        }
-        [HttpPost]
-        public Task<IActionResult> GetItemsForStore(int id)
-        {
-            return View();
+            List<StoreViewModel> storViewModels = new List<StoreViewModel>();
+            storViewModels = _storeLevelPrograms.ProductSelection(id);
+            return View("StoreInventory", storViewModels);
         }
 
+       
         // GET: StoreController/Create
         public ActionResult Create()
         {

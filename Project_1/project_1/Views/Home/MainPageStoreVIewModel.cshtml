@@ -37,7 +37,7 @@
                 @Html.DisplayFor(modelItem => item.totalSales)
             </td>
             <td>
-                <button type="button" onclick="alert('you picked @item.storeName')">Select</button>
+                <a asp-controller="Store" asp-action="GetStoreInvertory" asp-route-id="@item.Id">Select</a>
             </td>
         </tr>
 }

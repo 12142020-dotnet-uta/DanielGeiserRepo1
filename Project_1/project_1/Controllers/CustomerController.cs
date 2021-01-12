@@ -16,10 +16,12 @@ namespace project_1.Controllers
     public class CustomerController : Controller
     {
         private StoreLevelPrograms _storeLevelPrograms1;
+        private MapperClass _mapper;
         private readonly ILogger<CustomerController> _logger;
-        public CustomerController(StoreLevelPrograms storeLevelPrograms, ILogger<CustomerController> logger)
+        public CustomerController(StoreLevelPrograms storeLevelPrograms, MapperClass map, ILogger<CustomerController> logger)
         {
             _storeLevelPrograms1 = storeLevelPrograms;
+            _mapper = map;
             _logger = logger;
         }
         
@@ -33,8 +35,8 @@ namespace project_1.Controllers
         public async Task<IActionResult> CustomerLogin(CustomerViewModel customerViewModel)
         {
             string returnUrl = "";
-            MapperClass storeLevelPrograms = new MapperClass();
-            var identity = storeLevelPrograms.Authenticate(customerViewModel.firstName, customerViewModel.lastName);
+           
+            var identity = _mapper.Authenticate(customerViewModel.firstName, customerViewModel.lastName);
             if(identity == null)
             {
                 return RedirectToAction(nameof(CustomerLogin));
