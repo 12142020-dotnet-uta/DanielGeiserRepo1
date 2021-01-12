@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using ModelLayer.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,14 @@ namespace project_1.Controllers
 {
     public class CustomerController : Controller
     {
+        private StoreLevelPrograms _storeLevelPrograms1;
+        private readonly ILogger<CustomerController> _logger;
+        public CustomerController(StoreLevelPrograms storeLevelPrograms, ILogger<CustomerController> logger)
+        {
+            _storeLevelPrograms1 = storeLevelPrograms;
+            _logger = logger;
+        }
+        
         [HttpGet]
         public ActionResult CustomerLogin()
         {
@@ -24,7 +33,7 @@ namespace project_1.Controllers
         public async Task<IActionResult> CustomerLogin(CustomerViewModel customerViewModel)
         {
             string returnUrl = "";
-            StoreLevelPrograms storeLevelPrograms = new StoreLevelPrograms();
+            MapperClass storeLevelPrograms = new MapperClass();
             var identity = storeLevelPrograms.Authenticate(customerViewModel.firstName, customerViewModel.lastName);
             if(identity == null)
             {

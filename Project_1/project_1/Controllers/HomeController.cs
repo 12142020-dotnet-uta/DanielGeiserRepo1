@@ -14,17 +14,18 @@ namespace project_1.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private StoreLevelPrograms _storeLevelPrograms;
+        public HomeController(StoreLevelPrograms storeLevelPrograms, ILogger<HomeController> logger)
         {
+            _storeLevelPrograms = storeLevelPrograms;
             _logger = logger;
         }
 
+    
         public IActionResult MainPage()
         {
             List<Store> list = new List<Store>();
-            StoreLevelPrograms storeLevelPrograms = new StoreLevelPrograms();
-            list = storeLevelPrograms.GetStores();
+            list = _storeLevelPrograms.GetStores();
 
             return View("MainPageStoreViewModel",list);
         }

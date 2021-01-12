@@ -7,19 +7,36 @@ using ModelLayer;
 using ModelLayer.Models;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.Extensions.Logging;
+using ModelLayer.ViewModels;
 
 namespace RepositoryLayer
 {
     public class StoreAppRepsitoryLayer : InventoryDecrement
     {
-        static StoreAppContext SA_DbContext = new StoreAppContext();
-        DbSet<Store> stores = SA_DbContext.stores;
-        DbSet<Orders> orders = SA_DbContext.orders;
-        DbSet<OrderedItem> orderedItems = SA_DbContext.orderedItems;
-        DbSet<Item> items = SA_DbContext.ItemsAtStore;
-        DbSet<Customer> customers = SA_DbContext.customers;
-        DbSet<Product> products = SA_DbContext.products;
-        DbSet<Cart> carts = SA_DbContext.cart;
+        private readonly StoreAppContext _SA_DbContext;
+        private readonly ILogger<StoreAppRepsitoryLayer> _logger;
+        DbSet<Store> stores;
+        DbSet<Orders> orders;
+        DbSet<OrderedItem> orderedItems;
+        DbSet<Item> items;
+        DbSet<Customer> customers;
+        DbSet<Product> products;
+        DbSet<Cart> carts;
+        public StoreAppRepsitoryLayer() { }
+        public StoreAppRepsitoryLayer(StoreAppContext storeAppContext, ILogger<StoreAppRepsitoryLayer> logger)
+        {
+            this._SA_DbContext = storeAppContext;
+            this.stores = _SA_DbContext.stores;
+            this.orders = _SA_DbContext.orders;
+            this.orderedItems = _SA_DbContext.orderedItems;
+            this.items = _SA_DbContext.ItemsAtStore;
+            this.customers = _SA_DbContext.customers;
+            this.products = _SA_DbContext.products;
+            this.carts = _SA_DbContext.cart;
+            this._logger = logger;
+
+        }
 
         /// <summary>
         /// Creates a Customer after verifying that Customer does not already
@@ -41,7 +58,7 @@ namespace RepositoryLayer
                     lastName = lName
                 };
                 customers.Add(c1);
-                SA_DbContext.SaveChanges();
+                _SA_DbContext.SaveChanges();
             }
             return c1;
         }
@@ -68,7 +85,7 @@ namespace RepositoryLayer
             {
                 a.totalSales += order.total;
             }
-            SA_DbContext.SaveChanges();
+            _SA_DbContext.SaveChanges();
         }
 
         public Store SelectTheStore(int id)
@@ -106,20 +123,25 @@ namespace RepositoryLayer
             return allorders;
         }
         /// <summary>
-        /// Using a join to combine two tables. It returns a tuple of (int, string, double, int)
-        /// and the values are (productID, productName, product_Price, qty)
+        /// Takes an int for the store selection. Using a join to combine two tables. It returns a List of StoreViewModel
+        /// and the values are StoreViewModel.
         /// </summary>
         /// <param name="id"></param>
-        public List<(int, string, double, int)> GetItemForStore(int id)
+        public List<StoreViewModel> GetItemForStore(int id)
         {
             var itemandproduct = from i in items
                                  join p in products on i.productId equals p.productId
                                  where i.Id_TO_S == id
                                  select new { PId = i.productId, Product = p.productName, Price = p.price, Qty = i.qty };
-            List<(int, string, double, int)> temp = new List<(int, string, double, int)>();
+            List<StoreViewModel> temp = new List<StoreViewModel>();
             foreach (var entry in itemandproduct)
             {
-                temp.Add((entry.PId, entry.Product, entry.Price, entry.Qty));
+                StoreViewModel storeView = new StoreViewModel();
+                storeView.productId = entry.PId;
+                storeView.productName = entry.Product;
+                storeView.price = entry.Price;
+                storeView.qty = entry.Qty;
+                temp.Add(storeView);
             }
             return temp;
         }
@@ -249,7 +271,7 @@ namespace RepositoryLayer
                 }
 
             }
-            SA_DbContext.SaveChanges();
+            _SA_DbContext.SaveChanges();
         }
 
         public void ItemWasGrabed(Item item)
@@ -257,7 +279,7 @@ namespace RepositoryLayer
             int amountGrabed = item.qty;
             Item temp = items.Where(x => x.Id_TO_S == item.Id_TO_S && x.productId == item.productId).FirstOrDefault();
             temp.qty -= amountGrabed;
-            SA_DbContext.SaveChanges();
+            _SA_DbContext.SaveChanges();
         }
 
         public int TooManyGrabed(Item item, int wants)
@@ -291,7 +313,7 @@ namespace RepositoryLayer
                 Console.WriteLine(e);
             }
 
-            SA_DbContext.SaveChanges();
+            _SA_DbContext.SaveChanges();
 
             return agreed;
         }
@@ -310,8 +332,5 @@ namespace RepositoryLayer
 
             return new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
         }
-
-        
-
     }
 }

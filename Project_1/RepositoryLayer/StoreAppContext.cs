@@ -16,9 +16,15 @@ namespace RepositoryLayer
         public DbSet<Store> stores { get; set; }
         public DbSet<Cart> cart { get; set; }
 
+        public StoreAppContext() { }
+        public StoreAppContext(DbContextOptions options) : base(options) { }
+
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
-            options.UseSqlServer("Server=LocalHost\\SQLEXPRESS01;Database=Project_1_StoreApp;Trusted_Connection=True;");
+            if(!options.IsConfigured)
+            {
+                options.UseSqlServer("Server=LocalHost\\SQLEXPRESS01;Database=Project_1_StoreApp;Trusted_Connection=True;");
+            }
         }
 
     }

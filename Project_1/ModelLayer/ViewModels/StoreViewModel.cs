@@ -8,5 +8,9 @@ namespace ModelLayer.ViewModels
 {
     public class StoreViewModel
     {
+        public int productId { get; set; }
+        public string productName { get; set; }
+        public double price { get; set; }
+        public int qty { get; set; }
     }
 }

@@ -46,12 +46,14 @@ namespace project_1
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-
+            services.AddControllersWithViews();
             services.AddSingleton<IAuthorizationHandler, CanAccessUserHandler>();
             services.AddScoped<AuthenticationService>();
             services.AddScoped<StoreAppContext>();
+            services.AddScoped<StoreAppRepsitoryLayer>();
             services.AddScoped<MapperClass>();
-            services.AddControllersWithViews();
+            services.AddScoped<StoreLevelPrograms>();
+            
             services.AddRazorPages();
         }
 

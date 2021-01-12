@@ -10,7 +10,14 @@ namespace BusinessLayer
 {
     public class StoreLevelPrograms
     {
-        //private static StoreAppRepsitoryLayer storeAppRepsitoryLayer;
+        private readonly StoreAppRepsitoryLayer _storeAppRepsitoryLayer;
+        private readonly MapperClass _mapperClass;
+        public StoreLevelPrograms() { }
+        public StoreLevelPrograms(StoreAppRepsitoryLayer storeAppRepsitory,MapperClass mapper)
+        {
+            this._storeAppRepsitoryLayer = storeAppRepsitory;
+            this._mapperClass = mapper;
+        }
 
         public static Item ProductSelection(StoreAppRepsitoryLayer context, Store store)
         {
@@ -67,17 +74,9 @@ namespace BusinessLayer
             context.ProcessOrder(order, list, store);
         }
 
-        public ClaimsIdentity Authenticate(string username, string password)
-        {
-            StoreAppRepsitoryLayer storeAppRepsitoryLayer = new StoreAppRepsitoryLayer();
-            return storeAppRepsitoryLayer.Authenticate(username,password);
-        }
-
         public List<Store> GetStores()
         {
-            StoreAppRepsitoryLayer storeAppRepsitoryLayer = new StoreAppRepsitoryLayer();
-
-            return storeAppRepsitoryLayer.GetStores();
+            return _storeAppRepsitoryLayer.GetStores();
         }
 
     }

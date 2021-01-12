@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using ModelLayer;
 using ModelLayer.ViewModels;
+using RepositoryLayer;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -73,6 +75,12 @@ namespace BusinessLayer
 			string base64Image1 = base64Image.Split(',')[1];
 			byte[] bytes = Convert.FromBase64String(base64Image1);
 			return bytes;
+		}
+
+		public ClaimsIdentity Authenticate(string username, string password)
+		{
+			StoreAppRepsitoryLayer storeAppRepsitoryLayer = new StoreAppRepsitoryLayer();
+			return storeAppRepsitoryLayer.Authenticate(username, password);
 		}
 	}
 }
