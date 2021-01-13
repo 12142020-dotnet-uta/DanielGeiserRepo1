@@ -8,6 +8,6 @@ namespace ModelLayer.Models
     {
         void PremadeItemGrabed(Item it);
         void ItemWasGrabed(Item item);
-        int TooManyGrabed(Item item, int a);
+        void TooManyGrabed(Item item, int a);
     }
 }

@@ -16,6 +16,8 @@ namespace ModelLayer
         public string customerGuild { get; set; }
         [Column("Cart")]
         public Item InShoppingCart { get; set; }
+
+        public int amountPicked { get; set; }
         
         public Cart() { }
 

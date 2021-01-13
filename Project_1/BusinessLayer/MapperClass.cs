@@ -21,6 +21,19 @@ namespace BusinessLayer
 		{
 			this._storeAppRepsitoryLayer = storeAppRepsitory;
 		}
+
+		public OrderViewModel ConvertOrdersToOrderViewModel(Orders order)
+        {
+			OrderViewModel orderViewModel = new OrderViewModel()
+			{
+				orderID=order.orderID,
+				dateTime = order.dateTime,
+				total = order.total
+			};
+			return orderViewModel;
+        }
+
+
 		public CustomerViewModel ConvertPlayerToPlayerViewModel(Customer customer)
 		{
 			CustomerViewModel customerViewModel = new CustomerViewModel()

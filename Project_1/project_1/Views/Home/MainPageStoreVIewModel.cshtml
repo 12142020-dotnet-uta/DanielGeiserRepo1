@@ -36,9 +36,18 @@
             <td>
                 @Html.DisplayFor(modelItem => item.totalSales)
             </td>
-            <td>
-                <a asp-controller="Store" asp-action="GetStoreInvertory" asp-route-id="@item.Id">Select</a>
-            </td>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <td>
+                    <a asp-controller="Store" asp-action="GetStoreInvertory" asp-route-id="@item.Id">Select</a>
+                </td>
+            }
+            else
+            {
+                <td>
+                    <a onclick="alert('Login to go to @item.storeName')">Select</a>
+                </td>
+            }
         </tr>
 }
     </tbody>

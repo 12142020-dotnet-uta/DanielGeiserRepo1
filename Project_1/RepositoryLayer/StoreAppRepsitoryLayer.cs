@@ -55,7 +55,8 @@ namespace RepositoryLayer
                 c1 = new Customer()
                 {
                     firstName = fName,
-                    lastName = lName
+                    lastName = lName,
+                    Addmin = false
                 };
                 customers.Add(c1);
                 _SA_DbContext.SaveChanges();
@@ -109,12 +110,12 @@ namespace RepositoryLayer
             return allorders;
         }
 
-        public List<Orders> GetAllPastOrders(Customer c)
+        public List<Orders> GetAllPastOrders(string customerid)
         {
             List<Orders> allorders = new List<Orders>();
 
             var listallorders = from o in orders
-                                where o.customer.Customer_Id == c.Customer_Id
+                                where o.customer.Customer_Id.ToString() == customerid
                                 select o;
             foreach (var q in listallorders)
             {
@@ -153,31 +154,39 @@ namespace RepositoryLayer
             return p;
         }
 
-        public void FullOrderDisplay(Orders ord)
+        public List<FullOrderViewModel> FullOrderDisplay(int ord)
         {
-            try
+            
+            List<FullOrderViewModel> list = new List<FullOrderViewModel>();
+            //Havind a issue with getting store info
+            //
+            //Store temp = stores.Where(x => x.Id == ord.stroeLocation.Id).FirstOrDefault();
+            var query = from orderitem in orderedItems
+                        join od in orders on orderitem.OrderID equals od.orderID
+                        where od.orderID == ord
+                        select new { time = od.dateTime, PN = orderitem.ProductName, PP = orderitem.pricePaid, QT = orderitem.qtyOrdered };
+            Orders orde = orders.Where(x => x.orderID == ord).FirstOrDefault();
+            Store store = new Store();
+            var query2 = from s in stores where s.Id == ord select s;
+            foreach (var s in query2)
             {
-
-                //Havind a issue with getting store info
-                //
-                //Store temp = stores.Where(x => x.Id == ord.stroeLocation.Id).FirstOrDefault();
-                var query = from orderitem in orderedItems
-                            join od in orders on orderitem.OrderID equals od.orderID
-                            where od.orderID == ord.orderID
-                            select new { time = od.dateTime, PN = orderitem.ProductName, PP = orderitem.pricePaid, QT = orderitem.qtyOrdered };
-
-                Console.WriteLine("Date and Time: {0}", ord.dateTime);
-                foreach (var fd in query)
+                store = s;
+            }
+            foreach (var fd in query)
+            {
+                FullOrderViewModel fullOrderViewModel = new FullOrderViewModel()
                 {
-                    Console.WriteLine(fd.PN + " " + fd.QT + " @ " + fd.PP + " ==> " + (fd.PP * fd.QT));
-                }
-                Console.WriteLine("\t\tTotal: " + ord.total);
-
+                    dateTime = fd.time,
+                    OrderID = ord,
+                    ProductName = fd.PN,
+                    pricePaid = fd.PP,
+                    qtyOrdered = fd.QT,
+                    storeName = store.storeName,
+                    location = store.location
+                };
+                list.Add(fullOrderViewModel);
             }
-            catch (Exception e)
-            {
-                Console.WriteLine("Join not working" + e);
-            }
+            return list;
 
         }
 
@@ -284,7 +293,7 @@ namespace RepositoryLayer
             _SA_DbContext.SaveChanges();
         }
 
-        public int TooManyGrabed(Item item, int wants)
+        public void TooManyGrabed(Item item, int wants)
         {
             Item temp = items.Where(x => x.Id_TO_S == item.Id_TO_S && x.productId == item.productId).FirstOrDefault();
             int agreed = 0;
@@ -316,8 +325,6 @@ namespace RepositoryLayer
             }
 
             _SA_DbContext.SaveChanges();
-
-            return agreed;
         }
         public ClaimsIdentity Authenticate(string username, string password)
         {
@@ -337,13 +344,25 @@ namespace RepositoryLayer
 
         public void AddToCart(Item i,Cart a)
         {
-            var temp = from fill in items where fill.Id_TO_S == i.Id_TO_S && fill.productId == i.productId select fill;
-            foreach( var item in temp)
-            {
-                a.InShoppingCart = item;
-            }
+            Item temp = items.Where(x => x.Id_TO_S == i.Id_TO_S && x.productId == i.productId).FirstOrDefault();
+            TooManyGrabed(temp,i.qty);
+            ItemWasGrabed(i);
+            PremadeItemGrabed(i);
+            a.the_store_id = temp.Id_TO_S;
+            a.InShoppingCart = temp;
             carts.Add(a);
             _SA_DbContext.SaveChanges();
+        }
+
+        public List<Cart> GetCartItems(string CustGuidString)
+        {
+            var itemincart = from c in carts where c.customerGuild == CustGuidString select c;
+            List<Cart> cart = new List<Cart>();
+            foreach(var c in itemincart)
+            {
+                cart.Add(c);
+            }
+            return cart;
         }
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using ModelLayer;
 using ModelLayer.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -25,16 +26,23 @@ namespace project_1.Controllers
             return View();
         }
 
-        
+        /// <summary>
+        /// Based on the store picked the cart will be filled with what the user as selected at 
+        /// said store. Total calualtions will be made so you know how much it is going to be
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public ActionResult ViewCart(int id)
         {
-            return View();
+            List<Cart> carts = new List<Cart>();
+            carts = _storeLevelPrograms.GetCartItems(HttpContext.Session.GetString("Guid"));
+            return View(carts);
         }
 
         public ActionResult AddToCart(StoreViewModel svm)
         {
             _storeLevelPrograms.AddToCart(svm, HttpContext);
-            return View();
+            return RedirectToAction("GetStoreInvertory","Store", new { id = svm.ID_store });
         }
 
         // POST: CartController/Create

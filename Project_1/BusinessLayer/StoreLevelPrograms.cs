@@ -61,12 +61,30 @@ namespace BusinessLayer
             item.sale = svm.sale;
             Cart cart = new Cart();
             cart.customerGuild = context.Session.GetString("Guid");
+            cart.amountPicked = svm.qty;
             _storeAppRepsitoryLayer.AddToCart(item,cart);
         }
 
         public List<Store> GetStores()
         {
             return _storeAppRepsitoryLayer.GetStores();
+        }
+
+        public List<Cart> GetCartItems(string customerGuidtoString)
+        {
+            return _storeAppRepsitoryLayer.GetCartItems(customerGuidtoString);
+        }
+
+        public List<Orders> AllPastOrders(string customerid)
+        {
+            return _storeAppRepsitoryLayer.GetAllPastOrders(customerid);
+        }
+
+        public List<FullOrderViewModel> GetFullOrderDetails(int id)
+        {
+            List<FullOrderViewModel> fullorder = new List<FullOrderViewModel>(); 
+            fullorder = _storeAppRepsitoryLayer.FullOrderDisplay(id);
+            return fullorder;
         }
 
     }
