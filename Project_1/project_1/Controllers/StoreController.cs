@@ -1,4 +1,5 @@
 ﻿using BusinessLayer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -30,12 +31,13 @@ namespace project_1.Controllers
         {
             List<StoreViewModel> storViewModels = new List<StoreViewModel>();
             storViewModels = _storeLevelPrograms.ProductSelection(id);
-            return View("StoreInventory", storViewModels);
+            return View("StoreInvertory2", storViewModels);
         }
 
-       
+
         // GET: StoreController/Create
-        public ActionResult Create()
+        [Authorize]
+        public ActionResult CreateProduct()
         {
             return View();
         }
@@ -43,7 +45,7 @@ namespace project_1.Controllers
         // POST: StoreController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult CreateProduct(IFormCollection collection)
         {
             try
             {
@@ -54,17 +56,18 @@ namespace project_1.Controllers
                 return View();
             }
         }
-
+        [Authorize]
         // GET: StoreController/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult EditProduct(int id)
         {
             return View();
         }
 
         // POST: StoreController/Edit/5
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult EditProduct(int id, IFormCollection collection)
         {
             try
             {
@@ -77,15 +80,17 @@ namespace project_1.Controllers
         }
 
         // GET: StoreController/Delete/5
-        public ActionResult Delete(int id)
+        [Authorize]
+        public ActionResult DeleteProduct(int id)
         {
             return View();
         }
 
         // POST: StoreController/Delete/5
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult DeleteProduct(int id, IFormCollection collection)
         {
             try
             {

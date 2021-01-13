@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BusinessLayer;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using ModelLayer.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,21 +12,28 @@ namespace project_1.Controllers
 {
     public class CartController : Controller
     {
+        private readonly ILogger<CartController> _logger;
+        private StoreLevelPrograms _storeLevelPrograms;
+        public CartController(StoreLevelPrograms storeLevelPrograms, ILogger<CartController> logger)
+        {
+            _storeLevelPrograms = storeLevelPrograms;
+            _logger = logger;
+        }
         // GET: CartController
         public ActionResult Index()
         {
             return View();
         }
 
-        // GET: CartController/Details/5
-        public ActionResult Details(int id)
+        
+        public ActionResult ViewCart(int id)
         {
             return View();
         }
 
-        // GET: CartController/Create
-        public ActionResult Create()
+        public ActionResult AddToCart(StoreViewModel svm)
         {
+            _storeLevelPrograms.AddToCart(svm, HttpContext);
             return View();
         }
 

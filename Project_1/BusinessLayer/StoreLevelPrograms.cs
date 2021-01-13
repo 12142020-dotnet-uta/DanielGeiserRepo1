@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 using ModelLayer;
 using ModelLayer.ViewModels;
 using RepositoryLayer;
@@ -50,6 +51,17 @@ namespace BusinessLayer
             order.dateTime = DateTime.Now;
 
             context.ProcessOrder(order, list, store);
+        }
+        public void AddToCart(StoreViewModel svm,HttpContext context)
+        {
+            Item item = new Item();
+            item.Id_TO_S = svm.ID_store;
+            item.productId = svm.productId;
+            item.qty = svm.qty;
+            item.sale = svm.sale;
+            Cart cart = new Cart();
+            cart.customerGuild = context.Session.GetString("Guid");
+            _storeAppRepsitoryLayer.AddToCart(item,cart);
         }
 
         public List<Store> GetStores()

@@ -8,5 +8,6 @@ namespace ModelLayer.ViewModels
 {
     public class ItemViewModel
     {
+
     }
 }

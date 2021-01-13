@@ -46,6 +46,10 @@ namespace project_1
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+            services.AddDistributedMemoryCache();
+            services.AddSession(options => {
+                options.IdleTimeout = TimeSpan.FromMinutes(60);//You can set Time   
+            });
             services.AddControllersWithViews();
             services.AddSingleton<IAuthorizationHandler, CanAccessUserHandler>();
             services.AddScoped<AuthenticationService>();
@@ -78,6 +82,7 @@ namespace project_1
             app.UseAuthentication();
 
             app.UseAuthorization();
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {

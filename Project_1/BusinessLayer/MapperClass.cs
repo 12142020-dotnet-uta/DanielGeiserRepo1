@@ -14,6 +14,13 @@ namespace BusinessLayer
 {
     public class MapperClass
     {
+
+		private readonly StoreAppRepsitoryLayer _storeAppRepsitoryLayer;
+		public MapperClass() { }
+		public MapperClass(StoreAppRepsitoryLayer storeAppRepsitory)
+		{
+			this._storeAppRepsitoryLayer = storeAppRepsitory;
+		}
 		public CustomerViewModel ConvertPlayerToPlayerViewModel(Customer customer)
 		{
 			CustomerViewModel customerViewModel = new CustomerViewModel()
@@ -77,10 +84,15 @@ namespace BusinessLayer
 			return bytes;
 		}
 
+		public Customer GetCustomer(string username, string password)
+        {
+			return _storeAppRepsitoryLayer.CreateCustomer(username, password);
+        }
+
 		public ClaimsIdentity Authenticate(string username, string password)
 		{
-			StoreAppRepsitoryLayer storeAppRepsitoryLayer = new StoreAppRepsitoryLayer();
-			return storeAppRepsitoryLayer.Authenticate(username, password);
+			
+			return _storeAppRepsitoryLayer.Authenticate(username, password);
 		}
 	}
 }

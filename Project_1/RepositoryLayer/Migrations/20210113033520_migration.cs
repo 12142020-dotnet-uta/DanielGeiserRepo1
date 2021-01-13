@@ -91,8 +91,8 @@ namespace RepositoryLayer.Migrations
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    store_idId = table.Column<int>(type: "int", nullable: true),
-                    Owner_Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Location = table.Column<int>(type: "int", nullable: false),
+                    Owner_Id = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     InShoppingCartId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -102,12 +102,6 @@ namespace RepositoryLayer.Migrations
                         name: "FK_cart_ItemsAtStore_InShoppingCartId",
                         column: x => x.InShoppingCartId,
                         principalTable: "ItemsAtStore",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_cart_stores_store_idId",
-                        column: x => x.store_idId,
-                        principalTable: "stores",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -144,11 +138,6 @@ namespace RepositoryLayer.Migrations
                 name: "IX_cart_InShoppingCartId",
                 table: "cart",
                 column: "InShoppingCartId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_cart_store_idId",
-                table: "cart",
-                column: "store_idId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_orders_Customer_Id",

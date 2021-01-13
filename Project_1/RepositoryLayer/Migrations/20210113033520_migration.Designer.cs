@@ -10,7 +10,7 @@ using RepositoryLayer;
 namespace RepositoryLayer.Migrations
 {
     [DbContext(typeof(StoreAppContext))]
-    [Migration("20210112014330_migration")]
+    [Migration("20210113033520_migration")]
     partial class migration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,18 +31,17 @@ namespace RepositoryLayer.Migrations
                     b.Property<int?>("InShoppingCartId")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("customer")
-                        .HasColumnType("uniqueidentifier")
+                    b.Property<string>("customerGuild")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("Owner_Id");
 
-                    b.Property<int?>("store_idId")
-                        .HasColumnType("int");
+                    b.Property<int>("the_store_id")
+                        .HasColumnType("int")
+                        .HasColumnName("Location");
 
                     b.HasKey("id");
 
                     b.HasIndex("InShoppingCartId");
-
-                    b.HasIndex("store_idId");
 
                     b.ToTable("cart");
                 });
@@ -204,13 +203,7 @@ namespace RepositoryLayer.Migrations
                         .WithMany()
                         .HasForeignKey("InShoppingCartId");
 
-                    b.HasOne("ModelLayer.Store", "store_id")
-                        .WithMany()
-                        .HasForeignKey("store_idId");
-
                     b.Navigation("InShoppingCart");
-
-                    b.Navigation("store_id");
                 });
 
             modelBuilder.Entity("ModelLayer.Orders", b =>

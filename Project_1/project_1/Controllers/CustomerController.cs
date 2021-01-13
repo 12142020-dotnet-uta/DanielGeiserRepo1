@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using ModelLayer;
 using ModelLayer.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ namespace project_1.Controllers
     {
         private StoreLevelPrograms _storeLevelPrograms1;
         private MapperClass _mapper;
+        const string SessionID = "Guid";
         private readonly ILogger<CustomerController> _logger;
         public CustomerController(StoreLevelPrograms storeLevelPrograms, MapperClass map, ILogger<CustomerController> logger)
         {
@@ -34,7 +36,6 @@ namespace project_1.Controllers
         [ActionName("CustomerLogin")]
         public async Task<IActionResult> CustomerLogin(CustomerViewModel customerViewModel)
         {
-            string returnUrl = "";
            
             var identity = _mapper.Authenticate(customerViewModel.firstName, customerViewModel.lastName);
             if(identity == null)
@@ -45,6 +46,8 @@ namespace project_1.Controllers
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(identity),
                 new AuthenticationProperties());
+            Customer cus = _mapper.GetCustomer(customerViewModel.firstName, customerViewModel.lastName);
+            HttpContext.Session.SetString(SessionID,cus.Customer_Id.ToString());
 
             return RedirectToAction("MainPage","Home");
         }
@@ -52,6 +55,7 @@ namespace project_1.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            HttpContext.Session.Remove("Guid");
             return RedirectToAction("Index","Home");
         }
 

@@ -132,7 +132,7 @@ namespace RepositoryLayer
             var itemandproduct = from i in items
                                  join p in products on i.productId equals p.productId
                                  where i.Id_TO_S == id
-                                 select new { PId = i.productId, Product = p.productName, Price = p.price, Qty = i.qty };
+                                 select new { PId = i.productId, Product = p.productName, Price = p.price, Qty = i.qty , Sale = i.sale};
             List<StoreViewModel> temp = new List<StoreViewModel>();
             foreach (var entry in itemandproduct)
             {
@@ -141,6 +141,8 @@ namespace RepositoryLayer
                 storeView.productName = entry.Product;
                 storeView.price = entry.Price;
                 storeView.qty = entry.Qty;
+                storeView.ID_store = id;
+                storeView.sale = entry.Sale;
                 temp.Add(storeView);
             }
             return temp;
@@ -331,6 +333,17 @@ namespace RepositoryLayer
              if (user.Addmin) claims.Add(new Claim("IsAdmin", "Yes"));
 
             return new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+        }
+
+        public void AddToCart(Item i,Cart a)
+        {
+            var temp = from fill in items where fill.Id_TO_S == i.Id_TO_S && fill.productId == i.productId select fill;
+            foreach( var item in temp)
+            {
+                a.InShoppingCart = item;
+            }
+            carts.Add(a);
+            _SA_DbContext.SaveChanges();
         }
     }
 }
