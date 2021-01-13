@@ -14,7 +14,7 @@ namespace ModelLayer.ViewModels
         [Required, DataType(DataType.DateTime)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime dateTime { get; set; }
-        
+        [Range(typeof(decimal), "0", "2")]
         public double total { get; set; }
  
     }

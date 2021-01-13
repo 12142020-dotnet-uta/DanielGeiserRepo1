@@ -59,5 +59,22 @@ namespace project_1.Controllers
 
             return View(orderViewModels);
         }
+
+        /// <summary>
+        /// This will just get all the past orders of a store and list them
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult AllPastStoreOrders(int idStore)
+        {
+            List<OrderViewModel> orderViewModels = new List<OrderViewModel>();
+            List<Orders> orders = new List<Orders>();
+            orders = _storeLevelPrograms.AllPastStoreOrders(idStore);
+            foreach (var entry in orders)
+            {
+                orderViewModels.Add(_mapper.ConvertOrdersToOrderViewModel(entry));
+            }
+
+            return View(orderViewModels);
+        }
     }
 }

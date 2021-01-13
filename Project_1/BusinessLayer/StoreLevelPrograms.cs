@@ -5,6 +5,7 @@ using ModelLayer.ViewModels;
 using RepositoryLayer;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 
@@ -28,29 +29,47 @@ namespace BusinessLayer
             return list;
         }
 
-        public static void CheckOutCounter(StoreAppRepsitoryLayer context, Store store, Customer customer, List<Item> loaded)
+        public double CheckOutTotal(List<Cart> loaded)
         {
             Product temp = new Product();
-            Orders order = new Orders();
-            order.stroeLocation = store;
-            order.customer = customer;
             List<OrderedItem> list = new List<OrderedItem>();
             double tempTotal = 0;
             foreach (var grab in loaded)
             {
-                temp = context.GetProduct(grab.productId);
+                temp = _storeAppRepsitoryLayer.GetProduct(grab.InShoppingCart);
                 OrderedItem orderedItem = new OrderedItem();
                 orderedItem.ProductName = temp.productName;
-                orderedItem.qtyOrdered = grab.qty;
+                orderedItem.qtyOrdered = grab.amountPicked;
                 orderedItem.pricePaid = temp.price;
                 list.Add(orderedItem);
-                tempTotal = tempTotal + (grab.qty * temp.price);
+                tempTotal = tempTotal + (grab.amountPicked * temp.price);
             }
-            Console.WriteLine("Current Total: {0:0.00}", tempTotal);
+            return tempTotal;
+
+        }
+
+        public void CheckOutCounter(List<Cart> loaded,int storeid,string guid)
+        {
+            Product temp = new Product();
+            Orders order = new Orders();
+            order.storeLocationID = storeid;
+            order.customerGuid = guid;
+            List<OrderedItem> list = new List<OrderedItem>();
+            double tempTotal = 0;
+            foreach (var grab in loaded)
+            {
+                temp = _storeAppRepsitoryLayer.GetProduct(grab.InShoppingCart);
+                OrderedItem orderedItem = new OrderedItem();
+                orderedItem.ProductName = temp.productName;
+                orderedItem.qtyOrdered = grab.amountPicked;
+                orderedItem.pricePaid = temp.price;
+                list.Add(orderedItem);
+                tempTotal = tempTotal + (grab.amountPicked * temp.price);
+            }
             order.total = tempTotal;
             order.dateTime = DateTime.Now;
 
-            context.ProcessOrder(order, list, store);
+            _storeAppRepsitoryLayer.ProcessOrder(order, list, storeid,guid);
         }
         public void AddToCart(StoreViewModel svm,HttpContext context)
         {
@@ -87,5 +106,39 @@ namespace BusinessLayer
             return fullorder;
         }
 
+        public List<Orders> AllPastStoreOrders(int id)
+        {
+            return _storeAppRepsitoryLayer.GetAllStorePastOrders(id);
+        }
+        public List<Orders> DisplayPastOrders(List<Orders> lo,int sort)
+        {
+            List<Orders> temp3 = new List<Orders>();
+            switch (sort)
+            {
+                case 2:
+                    var temp = lo.OrderByDescending(x => x.dateTime);
+                    foreach (var der in temp)
+                    {
+                        temp3.Add(der);
+                    }
+                    Console.WriteLine();
+                    break;
+                case 1:
+                    var temp2 = lo.OrderBy(x => x.dateTime);
+                    foreach (var der in temp2)
+                    {
+                        temp3.Add(der);
+                    }
+                    Console.WriteLine();
+                    break;
+                case 3:
+                    temp3.Add(lo.Where(x => x.total ==  lo.Min(x => x.total)).FirstOrDefault());
+                    break;
+                case 4:
+                    temp3.Add(lo.Where(x => x.total == lo.Max(x => x.total)).FirstOrDefault());
+                    break;
+            }
+            return lo;
+        }
     }
 }

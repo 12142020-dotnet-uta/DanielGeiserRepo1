@@ -10,9 +10,9 @@ namespace ModelLayer
         [Key]
         public int orderID { get; set; }
         [Required]
-        public Store stroeLocation { get; set; }
+        public int storeLocationID { get; set; }
         [Required]
-        public Customer customer { get; set; }
+        public string customerGuid { get; set; }
         public double total { get; set; }
         [Required, DataType(DataType.DateTime)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
@@ -20,7 +20,7 @@ namespace ModelLayer
 
         public override string ToString()
         {
-            return $"Ordered at {stroeLocation.Id}\nTotal was {total}\nat {dateTime}";
+            return $"Ordered at {storeLocationID}\nTotal was {total}\nat {dateTime}";
         }
     }
 }

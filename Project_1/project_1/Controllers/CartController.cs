@@ -32,11 +32,29 @@ namespace project_1.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public ActionResult ViewCart(int id)
+        public ActionResult ViewCart()
+        {
+            List<Cart> carts = new List<Cart>();
+            List<Item> items = new List<Item>();
+            carts = _storeLevelPrograms.GetCartItems(HttpContext.Session.GetString("Guid"));
+            double total = 0;
+            total = _storeLevelPrograms.CheckOutTotal(carts);
+            ViewBag.total = total;
+            return View(carts);
+        }
+
+        /// <summary>
+        /// Based on the store picked the cart will be filled with what the user as selected at 
+        /// said store. Total calualtions will be made so you know how much it is going to be
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult CheckOutCart(int id)
         {
             List<Cart> carts = new List<Cart>();
             carts = _storeLevelPrograms.GetCartItems(HttpContext.Session.GetString("Guid"));
-            return View(carts);
+            _storeLevelPrograms.CheckOutCounter(carts,id,HttpContext.Session.GetString("Guid"));
+            return RedirectToAction("MainPage", "Home");
         }
 
         public ActionResult AddToCart(StoreViewModel svm)

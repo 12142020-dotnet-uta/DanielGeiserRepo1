@@ -8,6 +8,22 @@ namespace RepositoryLayer.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "cart",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Location = table.Column<int>(type: "int", nullable: false),
+                    Owner_Id = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Cart = table.Column<int>(type: "int", nullable: false),
+                    amountPicked = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_cart", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "customers",
                 columns: table => new
                 {
@@ -86,34 +102,13 @@ namespace RepositoryLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "cart",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Location = table.Column<int>(type: "int", nullable: false),
-                    Owner_Id = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    InShoppingCartId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_cart", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_cart_ItemsAtStore_InShoppingCartId",
-                        column: x => x.InShoppingCartId,
-                        principalTable: "ItemsAtStore",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "orders",
                 columns: table => new
                 {
                     orderID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     stroeLocationId = table.Column<int>(type: "int", nullable: true),
-                    Customer_Id = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    customerGuid = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     total = table.Column<double>(type: "float", nullable: false),
                     dateTime = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -121,28 +116,12 @@ namespace RepositoryLayer.Migrations
                 {
                     table.PrimaryKey("PK_orders", x => x.orderID);
                     table.ForeignKey(
-                        name: "FK_orders_customers_Customer_Id",
-                        column: x => x.Customer_Id,
-                        principalTable: "customers",
-                        principalColumn: "Customer_Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
                         name: "FK_orders_stores_stroeLocationId",
                         column: x => x.stroeLocationId,
                         principalTable: "stores",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_cart_InShoppingCartId",
-                table: "cart",
-                column: "InShoppingCartId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_orders_Customer_Id",
-                table: "orders",
-                column: "Customer_Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_orders_stroeLocationId",
@@ -156,6 +135,12 @@ namespace RepositoryLayer.Migrations
                 name: "cart");
 
             migrationBuilder.DropTable(
+                name: "customers");
+
+            migrationBuilder.DropTable(
+                name: "ItemsAtStore");
+
+            migrationBuilder.DropTable(
                 name: "orderedItems");
 
             migrationBuilder.DropTable(
@@ -163,12 +148,6 @@ namespace RepositoryLayer.Migrations
 
             migrationBuilder.DropTable(
                 name: "products");
-
-            migrationBuilder.DropTable(
-                name: "ItemsAtStore");
-
-            migrationBuilder.DropTable(
-                name: "customers");
 
             migrationBuilder.DropTable(
                 name: "stores");

@@ -70,7 +70,7 @@ namespace RepositoryLayer
         /// <param name="order"></param>
         /// <param name="list"></param>
         /// <param name="store"></param>
-        public void ProcessOrder(Orders order, List<OrderedItem> list, Store store)
+        public void ProcessOrder(Orders order, List<OrderedItem> list, int store,string guid)
         {
             int OrderID = orders.Count() + 1;
             orders.Add(order);
@@ -80,28 +80,41 @@ namespace RepositoryLayer
                 orderedItems.Add(entry);
             }
             var query = from s in stores
-                        where s.Id == store.Id
+                        where s.Id == store
                         select s;
             foreach (var a in query)
             {
                 a.totalSales += order.total;
             }
+            List<Cart> cart = carts.Where(x => x.customerGuild == guid).ToList();
+            foreach(var c in cart)
+            {
+                carts.Remove(c);
+            }
             _SA_DbContext.SaveChanges();
         }
-
+        /// <summary>
+        /// Returns store based on store id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public Store SelectTheStore(int id)
         {
             Store select = new Store();
             select = stores.Where(x => x.Id == id).FirstOrDefault();
             return select;
         }
-
-        public List<Orders> GetAllStorePastOrders(Store store)
+        /// <summary>
+        /// List of past orders for a store
+        /// </summary>
+        /// <param name="store"></param>
+        /// <returns></returns>
+        public List<Orders> GetAllStorePastOrders(int store)
         {
             List<Orders> allorders = new List<Orders>();
 
             var listallorders = from o in orders
-                                where o.stroeLocation.Id == store.Id
+                                where o.storeLocationID == store
                                 select o;
             foreach (var q in listallorders)
             {
@@ -109,13 +122,17 @@ namespace RepositoryLayer
             }
             return allorders;
         }
-
+        /// <summary>
+        /// List of orders for a customer
+        /// </summary>
+        /// <param name="customerid"></param>
+        /// <returns></returns>
         public List<Orders> GetAllPastOrders(string customerid)
         {
             List<Orders> allorders = new List<Orders>();
 
             var listallorders = from o in orders
-                                where o.customer.Customer_Id.ToString() == customerid
+                                where o.customerGuid == customerid
                                 select o;
             foreach (var q in listallorders)
             {
@@ -148,9 +165,10 @@ namespace RepositoryLayer
             }
             return temp;
         }
-        public Product GetProduct(int id)
+        public Product GetProduct(int itemid)
         {
-            Product p = products.Where(x => x.productId == id).FirstOrDefault();
+            Item item = items.Where(x => x.Id == itemid).FirstOrDefault();
+            Product p = products.Where(x => x.productId == item.productId).FirstOrDefault();
             return p;
         }
 
@@ -349,14 +367,14 @@ namespace RepositoryLayer
             ItemWasGrabed(i);
             PremadeItemGrabed(i);
             a.the_store_id = temp.Id_TO_S;
-            a.InShoppingCart = temp;
+            a.InShoppingCart = (int)temp.Id;
             carts.Add(a);
             _SA_DbContext.SaveChanges();
         }
 
         public List<Cart> GetCartItems(string CustGuidString)
         {
-            var itemincart = from c in carts where c.customerGuild == CustGuidString select c;
+            var itemincart = carts.Where(x => x.customerGuild == CustGuidString);
             List<Cart> cart = new List<Cart>();
             foreach(var c in itemincart)
             {

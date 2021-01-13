@@ -10,8 +10,8 @@ using RepositoryLayer;
 namespace RepositoryLayer.Migrations
 {
     [DbContext(typeof(StoreAppContext))]
-    [Migration("20210113033520_migration")]
-    partial class migration
+    [Migration("20210113142143_migration1")]
+    partial class migration1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -28,7 +28,11 @@ namespace RepositoryLayer.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<int?>("InShoppingCartId")
+                    b.Property<int>("InShoppingCart")
+                        .HasColumnType("int")
+                        .HasColumnName("Cart");
+
+                    b.Property<int>("amountPicked")
                         .HasColumnType("int");
 
                     b.Property<string>("customerGuild")
@@ -40,8 +44,6 @@ namespace RepositoryLayer.Migrations
                         .HasColumnName("Location");
 
                     b.HasKey("id");
-
-                    b.HasIndex("InShoppingCartId");
 
                     b.ToTable("cart");
                 });
@@ -131,23 +133,20 @@ namespace RepositoryLayer.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<Guid?>("Customer_Id")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("customerGuid")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("dateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("stroeLocationId")
+                    b.Property<int>("storeLocationID")
                         .HasColumnType("int");
 
                     b.Property<double>("total")
                         .HasColumnType("float");
 
                     b.HasKey("orderID");
-
-                    b.HasIndex("Customer_Id");
-
-                    b.HasIndex("stroeLocationId");
 
                     b.ToTable("orders");
                 });
@@ -195,30 +194,6 @@ namespace RepositoryLayer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("stores");
-                });
-
-            modelBuilder.Entity("ModelLayer.Cart", b =>
-                {
-                    b.HasOne("ModelLayer.Item", "InShoppingCart")
-                        .WithMany()
-                        .HasForeignKey("InShoppingCartId");
-
-                    b.Navigation("InShoppingCart");
-                });
-
-            modelBuilder.Entity("ModelLayer.Orders", b =>
-                {
-                    b.HasOne("ModelLayer.Customer", "customer")
-                        .WithMany()
-                        .HasForeignKey("Customer_Id");
-
-                    b.HasOne("ModelLayer.Store", "stroeLocation")
-                        .WithMany()
-                        .HasForeignKey("stroeLocationId");
-
-                    b.Navigation("customer");
-
-                    b.Navigation("stroeLocation");
                 });
 #pragma warning restore 612, 618
         }

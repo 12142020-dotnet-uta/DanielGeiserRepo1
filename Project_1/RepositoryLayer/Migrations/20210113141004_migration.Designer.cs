@@ -10,8 +10,8 @@ using RepositoryLayer;
 namespace RepositoryLayer.Migrations
 {
     [DbContext(typeof(StoreAppContext))]
-    [Migration("20210113055318_migration2")]
-    partial class migration2
+    [Migration("20210113141004_migration")]
+    partial class migration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -28,8 +28,9 @@ namespace RepositoryLayer.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<int?>("InShoppingCartId")
-                        .HasColumnType("int");
+                    b.Property<int>("InShoppingCart")
+                        .HasColumnType("int")
+                        .HasColumnName("Cart");
 
                     b.Property<int>("amountPicked")
                         .HasColumnType("int");
@@ -43,8 +44,6 @@ namespace RepositoryLayer.Migrations
                         .HasColumnName("Location");
 
                     b.HasKey("id");
-
-                    b.HasIndex("InShoppingCartId");
 
                     b.ToTable("cart");
                 });
@@ -134,8 +133,9 @@ namespace RepositoryLayer.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<Guid?>("Customer_Id")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("customerGuid")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("dateTime")
                         .HasColumnType("datetime2");
@@ -147,8 +147,6 @@ namespace RepositoryLayer.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("orderID");
-
-                    b.HasIndex("Customer_Id");
 
                     b.HasIndex("stroeLocationId");
 
@@ -200,26 +198,11 @@ namespace RepositoryLayer.Migrations
                     b.ToTable("stores");
                 });
 
-            modelBuilder.Entity("ModelLayer.Cart", b =>
-                {
-                    b.HasOne("ModelLayer.Item", "InShoppingCart")
-                        .WithMany()
-                        .HasForeignKey("InShoppingCartId");
-
-                    b.Navigation("InShoppingCart");
-                });
-
             modelBuilder.Entity("ModelLayer.Orders", b =>
                 {
-                    b.HasOne("ModelLayer.Customer", "customer")
-                        .WithMany()
-                        .HasForeignKey("Customer_Id");
-
                     b.HasOne("ModelLayer.Store", "stroeLocation")
                         .WithMany()
                         .HasForeignKey("stroeLocationId");
-
-                    b.Navigation("customer");
 
                     b.Navigation("stroeLocation");
                 });

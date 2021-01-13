@@ -1,14 +1,17 @@
 ﻿@model IEnumerable<ModelLayer.Store>
-
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
 @{
     ViewData["Title"] = "MainPageStoreVIewModel";
 }
 
 <h1>MainPageStoreVIewModel</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+@if ((await AuthorizationService.AuthorizeAsync(User, "IsAdmin")).Succeeded)
+{
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+}
 <table class="table">
     <thead>
         <tr>
@@ -25,30 +28,31 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.storeName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.location)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.totalSales)
-            </td>
-            @if (User.Identity.IsAuthenticated)
-            {
+        @foreach (var item in Model)
+        {
+            <tr>
                 <td>
-                    <a asp-controller="Store" asp-action="GetStoreInvertory" asp-route-id="@item.Id">Select</a>
+                    @Html.DisplayFor(modelItem => item.storeName)
                 </td>
-            }
-            else
-            {
                 <td>
-                    <a onclick="alert('Login to go to @item.storeName')">Select</a>
+                    @Html.DisplayFor(modelItem => item.location)
                 </td>
-            }
-        </tr>
-}
+                <td>
+                    @Html.DisplayFor(modelItem => item.totalSales)
+                </td>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <td>
+                        <a asp-controller="Store" asp-action="GetStoreInvertory" asp-route-id="@item.Id">Select</a>
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        <a onclick="alert('Login to go to @item.storeName')">Select</a>
+                    </td>
+                }
+            </tr>
+        }
     </tbody>
 </table>
