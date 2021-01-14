@@ -37,6 +37,17 @@ namespace RepositoryLayer
             this._logger = logger;
 
         }
+        public StoreAppRepsitoryLayer(StoreAppContext storeAppContext)
+        {
+            this._SA_DbContext = storeAppContext;
+            this.stores = _SA_DbContext.stores;
+            this.orders = _SA_DbContext.orders;
+            this.orderedItems = _SA_DbContext.orderedItems;
+            this.items = _SA_DbContext.ItemsAtStore;
+            this.customers = _SA_DbContext.customers;
+            this.products = _SA_DbContext.products;
+            this.carts = _SA_DbContext.cart;
+        }
 
         /// <summary>
         /// Creates a Customer after verifying that Customer does not already

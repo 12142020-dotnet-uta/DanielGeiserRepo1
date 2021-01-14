@@ -21,6 +21,10 @@ namespace BusinessLayer
             this._storeAppRepsitoryLayer = storeAppRepsitory;
             this._mapperClass = mapper;
         }
+        public StoreLevelPrograms(StoreAppRepsitoryLayer storeAppRepsitory)
+        {
+            this._storeAppRepsitoryLayer = storeAppRepsitory;
+        }
 
         public List<StoreViewModel> ProductSelection(int store_id)
         {
