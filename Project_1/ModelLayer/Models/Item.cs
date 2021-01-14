@@ -14,6 +14,7 @@ namespace ModelLayer
         [Required]
         [Display(Name ="QTY")]
         private int Qty;
+        [DisplayFormat(DataFormatString = "{0:n2}", ApplyFormatInEditMode = true)]
         private double Sale;
         [Required]
         public int productId {get; set;}

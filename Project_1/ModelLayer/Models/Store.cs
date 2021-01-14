@@ -13,6 +13,7 @@ namespace ModelLayer
         public string storeName {get; set;}
         [Required]
         public string location {get; set;}
+        [DisplayFormat(DataFormatString = "{0:n2}", ApplyFormatInEditMode = true)]
         public double totalSales {get; set;}
         public Store()
         {

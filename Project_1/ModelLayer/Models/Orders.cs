@@ -13,6 +13,7 @@ namespace ModelLayer
         public int storeLocationID { get; set; }
         [Required]
         public string customerGuid { get; set; }
+        [DisplayFormat(DataFormatString = "{0:n2}", ApplyFormatInEditMode = true)]
         public double total { get; set; }
         [Required, DataType(DataType.DateTime)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
