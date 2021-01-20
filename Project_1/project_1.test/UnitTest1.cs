@@ -4,8 +4,8 @@ using ModelLayer;
 using RepositoryLayer;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Xunit;
-using project_1;
 
 namespace project_1.test
 {
@@ -15,7 +15,7 @@ namespace project_1.test
         static StoreAppRepsitoryLayer repo = new StoreAppRepsitoryLayer(cont);
         static StoreLevelPrograms storeLevelPrograms = new StoreLevelPrograms(repo);
 
-
+/*
         [Fact]
         public void CheckOutTotalTest()
         {
@@ -44,6 +44,40 @@ namespace project_1.test
          //   }
 
 
+        }*/
+
+        [Fact]//the name of the function should tell the user what the function is doing
+        public void CreateCustomerSavesANewPlayerToTheDb()
+        {
+            // arrange
+            // Creating the in-memory Db
+            var options = new DbContextOptionsBuilder<StoreAppContext>()
+                .UseInMemoryDatabase(databaseName: "TestDb").Options;
+
+            // act
+            // add to the In-memory Db
+            Customer p1 = new Customer();
+            using (var context = new StoreAppContext(options))
+            {
+                context.Database.EnsureDeleted();
+                context.Database.EnsureCreated();
+
+                StoreAppRepsitoryLayer repo = new StoreAppRepsitoryLayer(context);
+
+                p1 = repo.CreateCustomer("sparky", "jones");
+                context.SaveChanges();
+            }
+
+
+            // assert
+            // verify the results was as expected
+            using (var context = new StoreAppContext(options))
+            {
+                StoreAppRepsitoryLayer repo = new StoreAppRepsitoryLayer(context);
+                Customer result = repo.CreateCustomer("sparky", "jones");
+                Assert.True(p1.Customer_Id.Equals(result.Customer_Id));
+            }
         }
+        
     }
 }
